@@ -19,10 +19,7 @@ def index():  # Main Page
 # |== Config Routes ==|
 
 # Get Prices
-@app.route('/prices')
-def get_prices():
-    with open('data/prices.json') as f:
-        return json.load(f)
+
 
 
 # |== FUSION DATA ==|
@@ -38,6 +35,11 @@ def budget(building):
     # Get Budget Data about Fusion Building
     budget_data = data.budget(building)
     return {"budget": budget_data[0], "total": budget_data[1]}
+
+@app.route("/projects")
+def all_projects():
+    with open("data/projects.json") as projects_file:
+        return json.load(projects_file)
 
 
 # Main Loop

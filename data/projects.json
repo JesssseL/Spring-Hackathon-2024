@@ -1,0 +1,63 @@
+[
+  {
+    "name": "LED Bulb Replacement",
+    "cost": 5000,
+    "notes": "Flourescent lamps are replaced with LED bulbs, saves 4% of building electricity consumption per year"
+  },
+  {
+    "name": "LED fixture Replacement",
+    "cost": 85000,
+    "notes": "64kW flourescent lights are replaced with 25W LED lighting fixtures. Saves 7% of building electricity consumption per year"
+  },
+  {
+    "name": "Lighting Controls",
+    "cost": 8000,
+    "notes": "Includes vacancy sensors, daylight dimming sensors and timeclocks. Saves 2% of building electricity consumption per year"
+  },
+  {
+    "name": "Pump Upgrades",
+    "cost": 40000,
+    "notes": "Upgrade all pumps (all heating systems and hot water circulation) which makes them more efficient. Saves 5% of building electricity usage per year"
+  },
+  {
+    "name": "IT Server Upgrades",
+    "cost": 15000,
+    "notes": "Upgrades existing IT server equipment with newer high efficiency equipment. Saves around 6% of electricity consumption per building"
+  },
+  {
+    "name": "Boiler Upgrades",
+    "cost": 15000,
+    "notes": "End-of-life boilers are replaced with higher efficiency models, which saves 5% of building gas usage per year"
+  },
+  {
+    "name": "Insulation Upgrades (walls)",
+    "cost": 40000,
+    "notes": "Adds extra insulation to the walls of the building. Saves 6% of building gas usage per year"
+  },
+  {
+    "name": "Insulation Upgrades (roof)",
+    "cost": 75000,
+    "notes": "Adds extra insulation to the roof of a building. Saves 8% of the buildings gas usage per year"
+  },
+  {
+    "name": "Insulation Upgrades (pipework and ductwork)",
+    "cost": 2000,
+    "notes": "Adds insulation to all heated pipes and ducts. Saves 1% of buildng gas usage per year"
+  },
+  {
+    "name": "Air Source Heat Pump Retrofit",
+    "cost": 175000,
+    "notes": "For Dorset House only: Retrofitting an ASHP will eliminate gas usage completely in Dorset House, but increase the electricity consumption by 15%. If any other gas-saving projects are applied to Dorset House, apply the savings as electricity savings instead. If you retrofit an air source heat pump, the boilers will be removed, so you cannot also do boiler upgrades.",
+    "allowed_buildings": ["dorset_house"]
+  },
+  {
+    "name": "Heating, ventilation and cooling Controls Upgrades",
+    "cost": 35000,
+    "notes": "Enables energy-using equipment to be smarter, eg. heating and ventilation only comes on when someone walks into a room, saves 5% gas, 2% electricity per year"
+  },
+  {
+    "name": "Glazing upgrades (windows and doors)",
+    "cost": 250000,
+    "notes": "Upgrades all windows and doors to triple glazing. Saves 7% of the building's total gas usage per year"
+  }
+]

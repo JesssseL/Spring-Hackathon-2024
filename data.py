@@ -1,6 +1,10 @@
 import pandas as pd
 import numpy as np
+import json
 
+def get_prices():
+    with open('data/prices.json') as f:
+        return json.load(f)
 
 # All Fusion Data
 def get_data(building: str):
@@ -13,12 +17,13 @@ def get_data(building: str):
 
 
 def budget(building: str):
+    all_prices = get_prices()
     try:
         with open(f"data/{building}.csv") as f:
             file_data = pd.read_csv(f)
-            mean_vals = {"energy": np.mean(file_data["incoming_energy"]).round(2),
-                         "gas": np.mean(file_data["incoming_gas"]).round(2),
-                         "water": np.mean(file_data["incoming_water"]).round(2)}
+            mean_vals = {"energy": (np.mean(file_data["incoming_energy"]).round(2)*all_prices["elec"])/100,
+                         "gas": (np.mean(file_data["incoming_gas"]).round(2)*all_prices["gas"])/100,
+                         "water": (np.mean(file_data["incoming_water"]).round(2)*all_prices["water"])/100}
             return mean_vals, sum(mean_vals.values())
     except FileNotFoundError as e:
         return 404
