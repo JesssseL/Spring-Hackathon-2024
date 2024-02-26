@@ -1,4 +1,4 @@
-﻿Date,Incoming Grid electricity (kWh),Solar Electricity Production (kWh),Incoming mains Gas (kWh),
+﻿date,incoming_energy,solar_production,incoming_gas
 01/08/2022,1115.00,592.658,66.642,
 02/08/2022,1374.00,375.702,77.749,
 03/08/2022,1434.00,231.114,77.749,

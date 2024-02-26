@@ -1,4 +1,4 @@
-﻿Date,Incoming Grid electricity (kWh),Incoming mains Gas (kWh),Incoming Mains Water  (m3)
+﻿date,incoming_energy,incoming_gas,incoming_water
 01/08/2022,329.30,0.00,0.050
 02/08/2022,328.40,0.00,0.037
 03/08/2022,350.30,0.00,0.652
