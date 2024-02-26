@@ -27,13 +27,20 @@ function draw() {
     
 }
 
-function fillBuilding(params) {
-  
+function mouseClicked() {
+  //Check if mouse is over a building
+  if (mouseX > fusion.getX() && mouseX < fusion.getX() + fusion.getSize() && mouseY > fusion.getY() && mouseY < fusion.getY() + fusion.getSize()) {
+    console.log("Fusion")
+  }
 }
 
 function addBall(building) {
   //Adds a ball to the building
   if (building.getBudget() < building.getBalls().length) {
-    
+    // enough capacity
+    let ball = new Ball('', building);
+  } else {
+    // not enough capacity
+    let ball = new Ball('', null);
   }
 }
