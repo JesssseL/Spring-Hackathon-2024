@@ -17,6 +17,8 @@ let pooleGateway = new Building('PG', fusion.getX() + fusion.getSize() + GAP, bo
 let dorsetHouse = new Building('D', pooleGateway.getX() + pooleGateway.getSize() + GAP, boxHeight, (windowW/100)*15, 1000);
 let kimmeridge = new Building('K', dorsetHouse.getX() + dorsetHouse.getSize() + GAP, boxHeight, (windowW/100)*20, 1000);
 
+addBall('G', fusion);
+
 function draw() {
   //Change Speed Here
   frameRate(60);
@@ -32,8 +34,6 @@ function draw() {
   
   //Drawing My ✨perfect little pretend✨ Ball
   testBall();
-
-  addBall('G', fusion);
   
   for (var ball of fusion.getBalls()) {
     ball.update();
@@ -46,7 +46,9 @@ function mouseClicked() {
   if (checkBuilding(fusion)) {
     //Fusion
     console.log("Fusion")
-    ballBounce()
+    testFalling = true;
+    testX = mouseX;
+    testY = mouseY;
   } else if (checkBuilding(pooleGateway)) {
     //Fusion
     console.log("Poole Gateway")
@@ -85,10 +87,32 @@ function addBall(type, building) {
 
 let testFalling = false;
 let testX = 0;
-let testY = 20;
+let testY = 0;
 function testBall() {
-  if (falling =  )
-  circle(testX, testY, 20);
+  if (testFalling == false) {
+    circle(mouseX, mouseY, 20);
+  } else {
+    //BALL BOUNCE
+    circle(testX, testY, 20);
+    if (testY >= fusion.getY()) {
+      //ball not yet at top of fusion
+      circle(testX, testY, 20);
+      testY+= -5
+
+      //what side of the building is it on - > slide to closest exit
+      if (mouseX >= fusion.getX()+fusion.getSize()/2) {
+        //ball is on the right side of the building
+        console.log('ball right')
+        //side = 80;
+        testX +=
+      } else {
+        console.log('ball left')
+        //side = 20;
+      }
+    } else {
+      console.log('not in fusion', testX, fusion.getX(), fusion.getX()+fusion.getSize())
+    }
+  }
 }
 
 function ballBounce() {

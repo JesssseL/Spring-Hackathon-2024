@@ -31,13 +31,15 @@ class Ball {
     this.y = 0;
     this.type = type;
     this.building = building;
-    this.size = 10;
+    this.size = 20;
+    this.gravity = true;
   }
   setX(x) { this.x = x; }
   setY(y) { this.y = y; }
   getType() { return this.type; }
   getSize() { return this.size; }
   getBuilding() { return this.building; }
+  setGravity(gravity) { this.gravity = gravity; }
   draw(x, y) { 
     this.x = x;
     this.y = y;
@@ -54,9 +56,11 @@ class Ball {
     return ellipse(x, y, this.size, this.size); 
   }
   update() {
-    if (this.y < window.innerHeight) {
-      this.y+=5;
-      this.draw(this.x, this.y);
+    if (this.gravity) {
+      if (this.y < (windowHeight*0.9) - (this.size / 2) - 5) {
+        this.y+=5;
+      }
     }
+    this.draw(this.x, this.y);
   }
 }
