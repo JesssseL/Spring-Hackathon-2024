@@ -32,8 +32,7 @@ function draw() {
   dorsetHouse.draw();
   kimmeridge.draw();
   
-  //Drawing My ✨perfect little pretend✨ Ball
-  testBall();
+  //Drawing My ✨perfect little pretend✨ Ball testBall();
   
   for (var ball of fusion.getBalls()) {
     ball.update();
@@ -74,6 +73,7 @@ function addBall(type, building) {
   //Adds a ball to the building
   if (building.getBudget() > building.getBalls().length) {
     // enough capacity
+    //🛸TYPE, BUILDING, GRAVITY(TRUE???)🛸
     let ball = new Ball(type, building);
     ball.setX(100);
     ball.setY(100);
@@ -81,10 +81,12 @@ function addBall(type, building) {
     
   } else {
     // not enough capacity
+    //🛸TYPE, BUILDING, GRAVITY(FALSE??)🛸
     let ball = new Ball(type, null);
   }
 }
 
+/* Test Ball Bouncing - KEEP JUST IN CASE 4 NOW PLZ - DO NOT DELETE
 let testFalling = false;
 let testX = 0;
 let testY = 0;
@@ -112,8 +114,4 @@ function testBall() {
     }
   }
 }
-
-function ballBounce() {
-  background(255,0,0,28);
-  //Bounce the ball off the building when the building is at capacity
-}
+*/

@@ -67,6 +67,7 @@ class Ball {
     
   }
   bounce(building){
+    //Bounce the ball off the building when the building is at capacity
     if (this.y >= building.getY()-20) {
       //ball not yet at top of building
       this.draw(this.x, this.y);
