@@ -5,13 +5,6 @@ const electricCost = 45;
 const ballSize = 10;
 
 //Buildings
-//How to For Andrew -> RoomCode, x, y, budget
-let fusion = ['F', 20, 20, 1000];
-
-let pooleGateway = ['PG', 140, 20, 1000];
-let dorsetHouse = ['D', 260, 20, 1000];
-let kimmeridge = ['K', 380, 20, 1000];
-
 class Building(code, x, y, budget) {
   constructor(code, x, y, budget) {
     this.code = code;
@@ -21,7 +14,10 @@ class Building(code, x, y, budget) {
   }
 }
 
-let fusion = 
+let fusion = new Building('F', 20, 20, 1000);
+let pooleGateway = new Building('PG', 140, 20, 1000);
+let dorsetHouse = new Building('D', 260, 20, 1000);
+let kimmeridge = new Building('K', 380, 20, 1000);
 
 function setup() {
   createCanvas(windowWidth-10, windowHeight*0.9);
@@ -33,10 +29,10 @@ function draw() {
   //Drawing Buildings
   fill(255,255,255);
   //How to For Andrew - > X -co ord, Y co- ord, Size
-  square(fusion[1], fusion[2], 100);
-  square(pooleGateway[1], pooleGateway[2], 100);
-  square(dorsetHouse[1], dorsetHouse[2], 100);
-  square(kimmeridge[1], kimmeridge[2], 100);
+  square(fusion.x, fusion.y, 100);
+  square(pooleGateway.x, pooleGateway.y, 100);
+  square(dorsetHouse.x, dorsetHouse.y, 100);
+  square(kimmeridge.x, kimmeridge.y, 100);
   //function fillBuilding(20, 20, 'F')
 
   
