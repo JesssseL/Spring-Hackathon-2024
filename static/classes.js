@@ -60,7 +60,31 @@ class Ball {
       if (this.y < (windowHeight*0.9) - (this.size / 2) - 5) {
         this.y+=5;
       }
+      this.draw(this.x, this.y);
+    } else {
+      this.bounce(this.building)
     }
-    this.draw(this.x, this.y);
+    
+  }
+  bounce(building){
+    if (this.y >= building.getY()-20) {
+      //ball not yet at top of building
+      this.draw(this.x, this.y);
+      this.y += -(building.getSize()/10);
+
+      //what side of the building is it on --> slide to closest exit
+      if (mouseX >= building.getX()+building.getSize()/2) {
+        //⏩⏩ ball is on the right side of the building
+        this.x += ((building.getX()+building.getSize()+5)-this.x)/5
+      } else {
+        //⏪⏪ ball on left side of building
+        this.x += -(this.x-(building.getX()-5)/3)
+      }
+      //flash screen red
+      background(255,0,0,80)
+    } else {
+      console.log('out of box')
+      this.gravity = true
+    }
   }
 }
