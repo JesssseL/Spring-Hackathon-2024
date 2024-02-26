@@ -94,23 +94,21 @@ function testBall() {
   } else {
     //BALL BOUNCE
     circle(testX, testY, 20);
-    if (testY >= fusion.getY()) {
+    if (testY >= fusion.getY()-20) {
       //ball not yet at top of fusion
       circle(testX, testY, 20);
-      testY+= -5
+      testY+= -(fusion.getSize()/10);
 
       //what side of the building is it on - > slide to closest exit
       if (mouseX >= fusion.getX()+fusion.getSize()/2) {
         //ball is on the right side of the building
-        console.log('ball right')
-        //side = 80;
-        testX +=
+        testX += ((fusion.getX()+fusion.getSize()+5)-testX)/5
       } else {
-        console.log('ball left')
-        //side = 20;
+        testX += -(testX-(fusion.getX()-5)/3)
       }
+      background(255,0,0,80)
     } else {
-      console.log('not in fusion', testX, fusion.getX(), fusion.getX()+fusion.getSize())
+      console.log('out of box')
     }
   }
 }
