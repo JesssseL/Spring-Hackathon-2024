@@ -25,33 +25,44 @@ function draw() {
   dorsetHouse.draw();
   kimmeridge.draw();
 
-  addBall('W', fusion);
+  addBall('G', fusion);
 }
 
 function mouseClicked() {
-  //Check if mouse is over a building
-  if (mouseX > fusion.getX() && mouseX < fusion.getX() + fusion.getSize() && mouseY > fusion.getY() && mouseY < fusion.getY() + fusion.getSize()) {
+  //Check if mouse is over a building and react appropriatly ***COUGH COUGH ANDREW*** ahew sorry, what was that?
+  if (checkBuilding(fusion)) {
     //Fusion
     console.log("Fusion")
-  } else if (mouseX > pooleGateway.getX() && mouseX < pooleGateway.getX() + pooleGateway.getSize() && mouseY > pooleGateway.getY() && mouseY < pooleGateway.getY() + pooleGateway.getSize()) {
-    //Poole Gateway
-    console.log("PooleGateway")
-  } else if (mouseX > kimmeridge.getX() && mouseX < kimmeridge.getX() + kimmeridge.getSize() && mouseY > kimmeridge .getY() && mouseY < kimmeridge.getY() + kimmeridge.getSize()) {
-    //Kimmeridge
+  } else if (checkBuilding(pooleGateway)) {
+    //Fusion
+    console.log("Poole Gateway")
+  } else if (checkBuilding(dorsetHouse)) {
+    //Fusion
+    console.log("Dorset House")
+  } else if (checkBuilding(kimmeridge)) {
+    //Fusion
     console.log("Kimmeridge")
-  } else if (mouseX > dorsetHouse.getX() && mouseX < dorsetHouse.getX() + dorsetHouse.getSize() && mouseY > dorsetHouse.getY() && mouseY < dorsetHouse.getY() + dorsetHouse.getSize()) {
-    //Dorset House
-    console.log("DorsetHouse")
+  }
+}
+
+function checkBuilding(building) {
+  //Checks if mouse is over a building
+  if (mouseX > building.getX() && mouseX < building.getX() + building.getSize() && mouseY > building.getY() && mouseY < building.getY() + building.getSize()) {
+    return true
+  } else {
+    return false
   }
 }
 
 function addBall(type, building) {
   //Adds a ball to the building
-  if (building.getBudget() < building.getBalls().length) {
+  if (building.getBudget() > building.getBalls().length) {
     // enough capacity
     let ball = new Ball(type, building);
     building.addBall(ball);
-    ball.draw(100, 100);
+
+    let physics = new PhysicsEngine([fusion, pooleGateway, dorsetHouse, kimmeridge]);
+    
   } else {
     // not enough capacity
     let ball = new Ball(type, null);

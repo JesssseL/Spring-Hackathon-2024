@@ -24,10 +24,10 @@ class Building {
 
 //Ball
 class Ball {
-  size = 10;
   constructor(type, building) {
     this.type = type;
     this.building = building;
+    this.size = 10;
   }
   getType() { return this.type; }
   getSize() { return this.size; }
@@ -35,14 +35,14 @@ class Ball {
   draw(x, y) { 
     if (this.type == 'W') {
       // blue
-      background(0,0,255);
+      fill(0,0,255);
     } else if (this.type == 'E') {
       // yellow
-      background(255,255,0);
+      fill(255,255,0);
     } else if (this.type == 'G') {
       // purple
-      background(255,0,255);
+      fill(255,0,255);
     }
-    return ellipse(x, y, size, size); 
+    return ellipse(x, y, this.size, this.size); 
   }
 }
