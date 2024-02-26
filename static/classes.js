@@ -35,15 +35,14 @@ class Ball {
   draw(x, y) { 
     if (this.type == 'W') {
       // blue
-      fill(0,0,255);
+      background(0,0,255);
     } else if (this.type == 'E') {
       // yellow
-      fill(255,255,0);
+      background(255,255,0);
     } else if (this.type == 'G') {
       // purple
-      fill(255,0,255);
+      background(255,0,255);
     }
     return ellipse(x, y, size, size); 
   }
-  kill() { /* Remove from building */ }
 }
