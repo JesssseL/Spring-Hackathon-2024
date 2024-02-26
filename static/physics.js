@@ -1,9 +1,14 @@
 class PhysicsEngine {
   
-  constructor(buildings) {
-    this.buildings = buildings;
+  constructor(building, ball) {
+    this.building = building;
+    this.ball = ball;
   }
 
-  
+  update() {
+
+    
+    
+  }
   
 }
