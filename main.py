@@ -16,12 +16,6 @@ def index():  # Main Page
     return render_template('index.html')
 
 
-# |== Config Routes ==|
-
-# Get Prices
-
-
-
 # |== FUSION DATA ==|
 
 @app.route("/data/<building>")
@@ -40,6 +34,7 @@ def budget(building):
 def all_projects():
     with open("data/projects.json") as projects_file:
         return json.load(projects_file)
+
 
 
 # Main Loop

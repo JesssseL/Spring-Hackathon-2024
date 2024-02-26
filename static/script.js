@@ -17,9 +17,10 @@ let pooleGateway = new Building('PG', fusion.getX() + fusion.getSize() + GAP, bo
 let dorsetHouse = new Building('D', pooleGateway.getX() + pooleGateway.getSize() + GAP, boxHeight, (windowW/100)*15, 1000);
 let kimmeridge = new Building('K', dorsetHouse.getX() + dorsetHouse.getSize() + GAP, boxHeight, (windowW/100)*20, 1000);
 
-let box = 0;
-let forwards = true;
 function draw() {
+  //Change Speed Here
+  frameRate(60);
+  
   background(220);
   //Drawing Buildings
   fill(255,255,255);
@@ -28,22 +29,16 @@ function draw() {
   pooleGateway.draw();
   dorsetHouse.draw();
   kimmeridge.draw();
-
-  fill(box*3.154159265,(box/255)*42,box*0.7-80);
-  square(box, 20, 55);
-  if (forwards){
-    box++;
-  } else {
-    box--;
-  }
-  if (box == kimmeridge.getX() + kimmeridge.getSize()){
-    forwards = false;
-  }
-  if (box == 0){
-    forwards = true;
-  }
+  
+  //Drawing My ✨perfect little pretend✨ Ball
+  testBall();
 
   addBall('G', fusion);
+  
+  for (var ball of fusion.getBalls()) {
+    ball.update();
+  }
+  
 }
 
 function mouseClicked() {
@@ -51,6 +46,7 @@ function mouseClicked() {
   if (checkBuilding(fusion)) {
     //Fusion
     console.log("Fusion")
+    ballBounce()
   } else if (checkBuilding(pooleGateway)) {
     //Fusion
     console.log("Poole Gateway")
@@ -87,6 +83,15 @@ function addBall(type, building) {
   }
 }
 
+let testFalling = false;
+let testX = 0;
+let testY = 20;
+function testBall() {
+  if (falling =  )
+  circle(testX, testY, 20);
+}
+
 function ballBounce() {
-  
+  background(255,0,0,28);
+  //Bounce the ball off the building when the building is at capacity
 }

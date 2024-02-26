@@ -39,6 +39,8 @@ class Ball {
   getSize() { return this.size; }
   getBuilding() { return this.building; }
   draw(x, y) { 
+    this.x = x;
+    this.y = y;
     if (this.type == 'W') {
       // blue
       fill(0,0,255);
@@ -50,5 +52,11 @@ class Ball {
       fill(255,0,255);
     }
     return ellipse(x, y, this.size, this.size); 
+  }
+  update() {
+    if (this.y < window.innerHeight) {
+      this.y+=5;
+      this.draw(this.x, this.y);
+    }
   }
 }
