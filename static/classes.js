@@ -10,12 +10,14 @@ class Building {
     this.y = y;
     this.size = 100;
     this.budget = budget;
+    this.balls = [];
   }
   getCode() { return this.code; }
   getX() { return this.x; }
   getY() { return this.y; }
   getBudget() { return this.budget; }
   draw() { return square(this.x, this.y, this.size); }
+  getBalls() { return this.balls; }
 }
 
 //Ball

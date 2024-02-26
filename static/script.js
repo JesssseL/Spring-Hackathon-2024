@@ -33,7 +33,7 @@ function fillBuilding(params) {
 
 function addBall(building) {
   //Adds a ball to the building
-  if (building.getBudget() >= 0) {
+  if (building.getBudget() < building.getBalls().length) {
     
   }
 }
