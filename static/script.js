@@ -2,17 +2,7 @@
 const waterCost = 370;
 const electricCost = 45;
 
-const ballSize = 10;
 
-//Buildings
-class Building(code, x, y, budget) {
-  constructor(code, x, y, budget) {
-    this.code = code;
-    this.x = x;
-    this.y = y;
-    this.budget = budget;
-  }
-}
 
 let fusion = new Building('F', 20, 20, 1000);
 let pooleGateway = new Building('PG', 140, 20, 1000);
@@ -29,13 +19,12 @@ function draw() {
   //Drawing Buildings
   fill(255,255,255);
   //How to For Andrew - > X -co ord, Y co- ord, Size
-  square(fusion.x, fusion.y, 100);
-  square(pooleGateway.x, pooleGateway.y, 100);
-  square(dorsetHouse.x, dorsetHouse.y, 100);
-  square(kimmeridge.x, kimmeridge.y, 100);
-  //function fillBuilding(20, 20, 'F')
-
   
+  fusion.draw();
+  pooleGateway.draw();
+  dorsetHouse.draw();
+  kimmeridge.draw();
+    
 }
 
 function fillBuilding(params) {
@@ -44,5 +33,7 @@ function fillBuilding(params) {
 
 function addBall(building) {
   //Adds a ball to the building
-  
+  if (building.getBudget() >= 0) {
+    
+  }
 }
