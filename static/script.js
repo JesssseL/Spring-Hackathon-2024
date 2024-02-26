@@ -4,21 +4,23 @@ const electricCost = 45; // type = 'E'
 const gasCost = 10.7; // type = 'G'
 let windowW = window.innerWidth;
 
+const boxHeight = 200;
+
 function setup() {
   createCanvas(windowWidth-10, windowHeight*0.9);
 }
 
 //Makings Building
 const GAP = 20;
-let fusion = new Building('F', GAP, 100, (windowW/100)*10, 1000);
-let pooleGateway = new Building('PG', fusion.getX() + fusion.getSize() + GAP, 100, (windowW/100)*30, 1000);
-let dorsetHouse = new Building('D', pooleGateway.getX() + pooleGateway.getSize() + GAP, 100, (windowW/100)*15, 1000);
-let kimmeridge = new Building('K', dorsetHouse.getX() + dorsetHouse.getSize() + GAP, 100, (windowW/100)*20, 1000);
+let fusion = new Building('F', GAP, boxHeight, (windowW/100)*10, 1000);
+let pooleGateway = new Building('PG', fusion.getX() + fusion.getSize() + GAP, boxHeight, (windowW/100)*30, 1000);
+let dorsetHouse = new Building('D', pooleGateway.getX() + pooleGateway.getSize() + GAP, boxHeight, (windowW/100)*15, 1000);
+let kimmeridge = new Building('K', dorsetHouse.getX() + dorsetHouse.getSize() + GAP, boxHeight, (windowW/100)*20, 1000);
 
-
+let box = 0;
+let forwards = true;
 function draw() {
   background(220);
-
   //Drawing Buildings
   fill(255,255,255);
   
@@ -26,6 +28,20 @@ function draw() {
   pooleGateway.draw();
   dorsetHouse.draw();
   kimmeridge.draw();
+
+  fill(box*3.154159265,(box/255)*42,box*0.7-80);
+  square(box, 20, 55);
+  if (forwards){
+    box++;
+  } else {
+    box--;
+  }
+  if (box == kimmeridge.getX() + kimmeridge.getSize()){
+    forwards = false;
+  }
+  if (box == 0){
+    forwards = true;
+  }
 
   addBall('G', fusion);
 }
@@ -61,11 +77,9 @@ function addBall(type, building) {
   if (building.getBudget() > building.getBalls().length) {
     // enough capacity
     let ball = new Ball(type, building);
+    ball.setX(100);
+    ball.setY(100);
     building.addBall(ball);
-
-    let physics = new PhysicsEngine(building, ball);
-
-    physics.update();
     
   } else {
     // not enough capacity
@@ -73,3 +87,6 @@ function addBall(type, building) {
   }
 }
 
+function ballBounce() {
+  
+}
