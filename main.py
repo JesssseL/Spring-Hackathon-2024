@@ -6,6 +6,9 @@ from flask import Flask, jsonify, make_response, render_template, request, url_f
 
 import data
 
+ALL_BUILDINGS = ["dorset_house", "fusion", "kimmeridge", "pgb"]
+
+
 app = Flask(__name__,
             static_folder='static')
 
@@ -29,6 +32,13 @@ def budget(building):
     # Get Budget Data about Fusion Building
     budget_data = data.budget(building)
     return {"budget": budget_data[0], "total": budget_data[1]}
+
+@app.route("/budgets")
+def all_budgets():
+    result = {}
+    for building in ALL_BUILDINGS:
+        result[building] = data.budget(building)
+    return result
 
 @app.route("/projects")
 def all_projects():

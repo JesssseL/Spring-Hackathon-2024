@@ -3,7 +3,7 @@ const waterCost = 370; // type = 'W'
 const electricCost = 45; // type = 'E'
 const gasCost = 10.7; // type = 'G'
 let windowW = window.innerWidth;
-const LEVEL_TIME = 10000;
+const LEVEL_TIME = 2000;
 let currentTime = 0
 const boxHeight = 200;
 
@@ -18,6 +18,9 @@ let pooleGateway;
 let dorsetHouse;
 let kimmeridge;
 
+
+
+
 //Makings Building
 const GAP = 20;
 function setup() {
@@ -27,12 +30,10 @@ function setup() {
   engine = Matter.Engine.create();
   world = engine.world;
   Matter.Runner.run(engine);
-  ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-10, windowWidth, 20, {isStatic: true})
-  Matter.World.add(world, ground);
 
   //Buildings
   fusion = new Building('F', GAP, boxHeight, (windowW/100)*10, 1000);
-  pooleGateway = new Building('PG', fusion.getX() + fusion.getSize() + GAP, boxHeight, (windowW/100)*30, 1000);
+  pooleGateway = new Building('PG', fusion.getX() + fusion.getSize() + GAP, boxHeight, (windowW/100)*25, 1000);
   dorsetHouse = new Building('D', pooleGateway.getX() + pooleGateway.getSize() + GAP, boxHeight, (windowW/100)*15, 1000);
   kimmeridge = new Building('K', dorsetHouse.getX() + dorsetHouse.getSize() + GAP, boxHeight, (windowW/100)*20, 1000);
   addBall('G', fusion);
@@ -46,30 +47,35 @@ function draw() {
   //------UI Elements------
   //🕖 Time Bar 🕖
   fill(0,0,100);
-  rect(0,0,windowWidth,25);
+  rect(0,0,windowW,25);
   fill(0,255,255);
-  rect(0,0,(windowWidth/LEVEL_TIME)*currentTime,25);
+  rect(0,0,(windowW/LEVEL_TIME)*currentTime,25);
   currentTime++
 
   //🏆Win/ 💥Loss
-  if (currentTime >= LEVEL_TIME) {
+  if (currentTime >= LEVEL_TIME-10) {
     fill(255,0,0);
     textSize(50);
     text('💥', windowWidth/2, windowHeight/2);
     noLoop();
   } else {
-  //Drawing Buildings
-  fill(255,255,255);
-  fusion.draw();
-  pooleGateway.draw();
-  dorsetHouse.draw();
-  kimmeridge.draw();
+    //🏢 Drawing Buildings 🏢
+    fill(255,255,255);
+    fusion.draw();
+    pooleGateway.draw();
+    dorsetHouse.draw();
+    kimmeridge.draw();
   
-  //Drawing My ✨perfect little pretend✨ Ball testBall();
+    //Drawing My ✨perfect little pretend✨ Ball testBall();
   
     for (var ball of fusion.getBalls()) {
       ball.update();
     }
+
+
+    ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-10, windowWidth, 20, {isStatic: true})
+    Matter.World.add(world, ground);
+    
   }
 }
 

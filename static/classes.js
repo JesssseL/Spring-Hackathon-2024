@@ -11,7 +11,7 @@ class Building {
     this.size = size;
     this.budget = budget;
     this.balls = [];
-    this.body = Matter.Bodies.rectangle(x, y, size, size, {friction: 0.5, restitution: 0.6});
+    this.body = Matter.Bodies.rectangle(x, y, size, size, {friction: 0.5, restitution: 0.6, isStatic: true});
     Matter.World.add(world, this.body);
   }
   //Returning private variables
@@ -31,8 +31,8 @@ class Building {
 //Ball
 class Ball {
   constructor(type, building) {
-    this.x = 0;
-    this.y = 0;
+    this.x = 300;
+    this.y = 100;
     this.type = type;
     this.building = building;
     this.size = 20;
@@ -66,15 +66,15 @@ class Ball {
   update() {
     this.x = this.body.position.x;
     this.y = this.body.position.y;
-    if (this.gravity) {
-      if (this.y < (windowHeight*0.9) - (this.size / 2) - 5) {
+    //if (this.gravity) {
+      /*if (this.y < (windowHeight*0.9) - (this.size / 2) - 5) {
         this.y+=5;
-      }
+      }*/
       Matter.Body.setPosition(this.body, { x: this.x, y: this.y });
       this.draw(this.x, this.y);
-    } else {
-      this.bounce(this.building)
-    }
+    /*} else {
+      //this.bounce(this.building)
+    }*/
     
   }
   bounce(building){
