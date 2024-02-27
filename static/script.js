@@ -37,8 +37,22 @@ function setup() {
   dorsetHouse = new Building('D', pooleGateway.getX() + pooleGateway.getSize() + GAP, boxHeight, (windowW/100)*15, 1000);
   kimmeridge = new Building('K', dorsetHouse.getX() + dorsetHouse.getSize() + GAP, boxHeight, (windowW/100)*20, 1000);
   addBall('G', fusion);
-}
 
+  //Reset Button
+  let button;
+  button = createButton('Try Again?');
+  button.position(5, 65);
+  button.mousePressed(resetTime);
+}
+function resetTime() {
+  //set current time to 0
+  if (currentTime > 120) {
+    currentTime = 0
+  } else {
+    console.log ('Are you even gonna try?')
+    //window.alert('Are you even gonna try?')
+  } 
+}
 function draw() {
   //Change Speed Here
   frameRate(60);
@@ -52,31 +66,37 @@ function draw() {
   rect(0,0,(windowW/LEVEL_TIME)*currentTime,25);
   currentTime++
 
-  //🏆Win/ 💥Loss
-  if (currentTime >= LEVEL_TIME-10) {
-    fill(255,0,0);
-    textSize(50);
-    text('💥', windowWidth/2, windowHeight/2);
-    noLoop();
-  } else {
+  
     //🏢 Drawing Buildings 🏢
     fill(255,255,255);
-    fusion.draw();
-    pooleGateway.draw();
-    dorsetHouse.draw();
-    kimmeridge.draw();
-  
-    //Drawing My ✨perfect little pretend✨ Ball testBall();
-  
+    fusion.update();
+    pooleGateway.update();
+    dorsetHouse.update();
+    kimmeridge.update();
+
+    let bounds = Matter.Bodies.rectangle(
+      windowWidth / 2,
+      windowHeight * 0.95, // Adjust the position to be slightly below the area where balls are rendered
+      windowWidth - 10,
+      windowHeight * 0.9,
+      {
+        isStatic: true,
+        render: {
+          fillStyle: 'transparent', // Make the bounding box transparent
+          strokeStyle: 'none' // Disable stroke for the bounding box
+        }
+      }
+    );
+    Matter.World.add(world, bounds);
+    
     for (var ball of fusion.getBalls()) {
       ball.update();
     }
 
 
-    ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-10, windowWidth, 20, {isStatic: true})
-    Matter.World.add(world, ground);
+    //ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-10, windowWidth, 20, {isStatic: true})
+    //Matter.World.add(world, ground);
     
-  }
 }
 
 
@@ -122,4 +142,10 @@ function addBall(type, building) {
     //🛸TYPE, BUILDING, GRAVITY(FALSE??)🛸
     let ball = new Ball(type, null);
   }
+}
+
+//Sustainability Scores
+function checkSustainability() {
+  //Check if the buildings are sustainable
+  
 }

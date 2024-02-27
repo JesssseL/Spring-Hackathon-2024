@@ -11,7 +11,7 @@ class Building {
     this.size = size;
     this.budget = budget;
     this.balls = [];
-    this.body = Matter.Bodies.rectangle(x, y, size, size, {friction: 0.5, restitution: 0.6, isStatic: true});
+    this.body = Matter.Bodies.rectangle(x, y, size, size, {isStatic: true});
     Matter.World.add(world, this.body);
   }
   //Returning private variables
@@ -26,6 +26,10 @@ class Building {
   draw() { return square(this.x, this.y, this.size); }
   getBalls() { return this.balls; }
   addBall(ball) { this.balls.push(ball); }
+  update() {
+    Matter.Body.setPosition(this.body, { x: this.x, y: this.y });
+    this.draw();
+  }
 }
 
 //Ball
