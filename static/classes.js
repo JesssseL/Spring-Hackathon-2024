@@ -11,7 +11,10 @@ class Building {
     this.size = size;
     this.budget = budget;
     this.balls = [];
+    this.body = Matter.Bodies.rectangle(x, y, size, size, {friction: 0.5, restitution: 0.6});
+    Matter.World.add(world, this.body);
   }
+  //Returning private variables
   getCode() { return this.code; }
   getX() { return this.x; }
   getY() { return this.y; }
@@ -19,6 +22,7 @@ class Building {
   setY(y) { this.y = y; }
   getBudget() { return this.budget; }
   getSize() { return this.size; }
+  //Methods
   draw() { return square(this.x, this.y, this.size); }
   getBalls() { return this.balls; }
   addBall(ball) { this.balls.push(ball); }
@@ -33,12 +37,16 @@ class Ball {
     this.building = building;
     this.size = 20;
     this.gravity = true;
+    this.body = Matter.Bodies.circle(this.x, this.y, this.size);
+    Matter.World.add(world, this.body);
   }
+  //returning private variables
   setX(x) { this.x = x; }
   setY(y) { this.y = y; }
   getType() { return this.type; }
   getSize() { return this.size; }
   getBuilding() { return this.building; }
+  //Methods
   setGravity(gravity) { this.gravity = gravity; }
   draw(x, y) { 
     this.x = x;
@@ -56,10 +64,13 @@ class Ball {
     return ellipse(x, y, this.size, this.size); 
   }
   update() {
+    this.x = this.body.position.x;
+    this.y = this.body.position.y;
     if (this.gravity) {
       if (this.y < (windowHeight*0.9) - (this.size / 2) - 5) {
         this.y+=5;
       }
+      Matter.Body.setPosition(this.body, { x: this.x, y: this.y });
       this.draw(this.x, this.y);
     } else {
       this.bounce(this.building)

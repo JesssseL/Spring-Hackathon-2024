@@ -3,30 +3,63 @@ const waterCost = 370; // type = 'W'
 const electricCost = 45; // type = 'E'
 const gasCost = 10.7; // type = 'G'
 let windowW = window.innerWidth;
-
+const LEVEL_TIME = 10000;
+let currentTime = 0
 const boxHeight = 200;
 
-function setup() {
-  createCanvas(windowWidth-10, windowHeight*0.9);
-}
+// Matter.js
+let engine;
+let world;
+let ground;
+
+// Buildings
+let fusion;
+let pooleGateway;
+let dorsetHouse;
+let kimmeridge;
 
 //Makings Building
 const GAP = 20;
-let fusion = new Building('F', GAP, boxHeight, (windowW/100)*10, 1000);
-let pooleGateway = new Building('PG', fusion.getX() + fusion.getSize() + GAP, boxHeight, (windowW/100)*30, 1000);
-let dorsetHouse = new Building('D', pooleGateway.getX() + pooleGateway.getSize() + GAP, boxHeight, (windowW/100)*15, 1000);
-let kimmeridge = new Building('K', dorsetHouse.getX() + dorsetHouse.getSize() + GAP, boxHeight, (windowW/100)*20, 1000);
+function setup() {
+  //p5.js
+  createCanvas(windowWidth-10, windowHeight*0.9);
+  //Matter.js
+  engine = Matter.Engine.create();
+  world = engine.world;
+  Matter.Runner.run(engine);
+  ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-10, windowWidth, 20, {isStatic: true})
+  Matter.World.add(world, ground);
 
-addBall('G', fusion);
+  //Buildings
+  fusion = new Building('F', GAP, boxHeight, (windowW/100)*10, 1000);
+  pooleGateway = new Building('PG', fusion.getX() + fusion.getSize() + GAP, boxHeight, (windowW/100)*30, 1000);
+  dorsetHouse = new Building('D', pooleGateway.getX() + pooleGateway.getSize() + GAP, boxHeight, (windowW/100)*15, 1000);
+  kimmeridge = new Building('K', dorsetHouse.getX() + dorsetHouse.getSize() + GAP, boxHeight, (windowW/100)*20, 1000);
+  addBall('G', fusion);
+}
 
 function draw() {
   //Change Speed Here
   frameRate(60);
-  
   background(220);
+
+  //------UI Elements------
+  //🕖 Time Bar 🕖
+  fill(0,0,100);
+  rect(0,0,windowWidth,25);
+  fill(0,255,255);
+  rect(0,0,(windowWidth/LEVEL_TIME)*currentTime,25);
+  currentTime++
+
+  //🏆Win/ 💥Loss
+  if (currentTime >= LEVEL_TIME) {
+    fill(255,0,0);
+    textSize(50);
+    text('💥', windowWidth/2, windowHeight/2);
+    noLoop();
+  } else {
   //Drawing Buildings
   fill(255,255,255);
-  
   fusion.draw();
   pooleGateway.draw();
   dorsetHouse.draw();
@@ -34,28 +67,27 @@ function draw() {
   
   //Drawing My ✨perfect little pretend✨ Ball testBall();
   
-  for (var ball of fusion.getBalls()) {
-    ball.update();
+    for (var ball of fusion.getBalls()) {
+      ball.update();
+    }
   }
-  
 }
+
+
 
 function mouseClicked() {
   //Check if mouse is over a building and react appropriatly ***COUGH COUGH ANDREW*** ahew sorry, what was that?
   if (checkBuilding(fusion)) {
     //Fusion
     console.log("Fusion")
-    testFalling = true;
-    testX = mouseX;
-    testY = mouseY;
   } else if (checkBuilding(pooleGateway)) {
-    //Fusion
+    //Poole Gateway
     console.log("Poole Gateway")
   } else if (checkBuilding(dorsetHouse)) {
-    //Fusion
+    //Dorset House
     console.log("Dorset House")
   } else if (checkBuilding(kimmeridge)) {
-    //Fusion
+    //Kimmeridge
     console.log("Kimmeridge")
   }
 }
@@ -85,33 +117,3 @@ function addBall(type, building) {
     let ball = new Ball(type, null);
   }
 }
-
-/* Test Ball Bouncing - KEEP JUST IN CASE 4 NOW PLZ - DO NOT DELETE
-let testFalling = false;
-let testX = 0;
-let testY = 0;
-function testBall() {
-  if (testFalling == false) {
-    circle(mouseX, mouseY, 20);
-  } else {
-    //BALL BOUNCE
-    circle(testX, testY, 20);
-    if (testY >= fusion.getY()-20) {
-      //ball not yet at top of fusion
-      circle(testX, testY, 20);
-      testY+= -(fusion.getSize()/10);
-
-      //what side of the building is it on - > slide to closest exit
-      if (mouseX >= fusion.getX()+fusion.getSize()/2) {
-        //ball is on the right side of the building
-        testX += ((fusion.getX()+fusion.getSize()+5)-testX)/5
-      } else {
-        testX += -(testX-(fusion.getX()-5)/3)
-      }
-      background(255,0,0,80)
-    } else {
-      console.log('out of box')
-    }
-  }
-}
-*/
