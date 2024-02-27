@@ -1,56 +1,70 @@
+# Imports
 import json
 import os
 import sys
-
+import random
 from flask import Flask, jsonify, make_response, render_template, request, url_for, redirect
 
-import random
+# Import data handler
 import data
 
+# List all buildings
 ALL_BUILDINGS = ["dorset_house", "fusion", "kimmeridge", "pgb"]
 
 
+# Setup flask app
 app = Flask(__name__,
             static_folder='static')
 
 
-# app routes to different pages
+# Main Route - 
 @app.route('/')
 def index():  # Main Page
     return render_template('index.html')
 
+# ^^ MAIN ROUTE WEHRE BALLS AND BOXES ARE ^^
 
-# |== FUSION DATA ==|
+
+# vv API ROUTES TO GET DATA AND FUN STUFF vv
 
 @app.route("/data/<building>")
 def all_data(building):
-    # Get All Data about Fusion Building
+    # Get All Data about a specific building
     return data.get_data(building)
 
 
 @app.route("/budget/<building>")
 def budget(building):
-    # Get Budget Data about Fusion Building
+    # Get Budget Data about a specific building
     return data.budget(building)
 
 @app.route("/budgets")
 def all_budgets():
+    # Get all budgets. 
     result = {}
-    for building in ALL_BUILDINGS:
+    for building in ALL_BUILDINGS: # Go through each building and get its budget data
         result[building] = data.budget(building)
     return result
 
 @app.route("/sustainability")
 def all_sustainability():
+    # Get all sustainability data
     sustain = {}
-    for building in ALL_BUILDINGS:
-        sustain[building] = random.randint(0,100)
+    for building in ALL_BUILDINGS: # Go through each building and get its sustainability data
+        sustain[building] = data.sustainable(building)
     return sustain
 
 @app.route("/projects")
 def all_projects():
+    # Get all projects - will end up as balls
     with open("data/projects.json") as projects_file:
-        return json.load(projects_file)
+        return json.load(projects_file) # Just reads the projects file, and returns it as a json object
+
+
+# CUSTOM 404 PAGE
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 
 
