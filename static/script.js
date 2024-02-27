@@ -6,6 +6,14 @@ let windowW = window.innerWidth;
 const LEVEL_TIME = 2000;
 let currentTime = 0
 const boxHeight = 200;
+let sayNo;
+
+//Colour
+let Zomp = '#0DA486';
+let RobinEggBlue = '#33C7BC';
+let YellowGreen = '#8ACC3D';
+let TeaGreen = '#D0E89E';
+let HoneyDew = '#F0FFF3';
 
 // Matter.js
 let engine;
@@ -17,8 +25,6 @@ let fusion;
 let pooleGateway;
 let dorsetHouse;
 let kimmeridge;
-
-
 
 
 //Makings Building
@@ -36,10 +42,20 @@ function setup() {
   pooleGateway = new Building('PG', fusion.getX() + fusion.getSize() + GAP, boxHeight, (windowW/100)*25, 1000);
   dorsetHouse = new Building('D', pooleGateway.getX() + pooleGateway.getSize() + GAP, boxHeight, (windowW/100)*15, 1000);
   kimmeridge = new Building('K', dorsetHouse.getX() + dorsetHouse.getSize() + GAP, boxHeight, (windowW/100)*20, 1000);
-  addBall('G', fusion);
+
+  //⚽✨🏀✨⚾✨🏈 ADD BALLS HERE 🏉✨🏐✨⚾✨🥎  
+  for (b=0; b<=10; b++) { 
+    addBall('G', fusion); //gas
+  }
+  for (b=0; b<=10; b++) {
+    addBall('W', fusion); //water
+  }
+  for (b=0; b<=10; b++) {
+    addBall('E', fusion); //electric
+  }
 
   //Reset Button
-  let button;
+  let button;  
   button = createButton('Try Again?');
   button.position(5, 65);
   button.mousePressed(resetTime);
@@ -48,27 +64,51 @@ function resetTime() {
   //set current time to 0
   if (currentTime > 120) {
     currentTime = 0
+    sayNo = 0
   } else {
+    sayNo = 50
     console.log ('Are you even gonna try?')
+    
     //window.alert('Are you even gonna try?')
   } 
 }
+function buttonReact() {
+  if(sayNo >= 1){
+    //if on
+    textSize(200);
+    let newColor = color(Zomp); //staring Color
+    newColor.setAlpha(sayNo); 
+    fill(newColor)
+    text("NO", 0, 25, windowW);
+    sayNo--
+  }
+}
+
 function draw() {
   //Change Speed Here
   frameRate(60);
-  background(220);
+  background(HoneyDew);
+
+  buttonReact()
 
   //------UI Elements------
   //🕖 Time Bar 🕖
-  fill(0,0,100);
+  fill(Zomp);
   rect(0,0,windowW,25);
-  fill(0,255,255);
+  fill(RobinEggBlue);
   rect(0,0,(windowW/LEVEL_TIME)*currentTime,25);
   currentTime++
 
-  
+  //🏆Win/ 💥Loss
+    if (currentTime >= LEVEL_TIME-10) {
+      fill(255,0,0);
+      textSize(50);
+      text('💥', windowWidth/2, windowHeight/2);
+      //Dan attemting to code here
+    } else {
+      
     //🏢 Drawing Buildings 🏢
-    fill(255,255,255);
+    fill(RobinEggBlue);
     fusion.update();
     pooleGateway.update();
     dorsetHouse.update();
@@ -76,9 +116,9 @@ function draw() {
 
     let bounds = Matter.Bodies.rectangle(
       windowWidth / 2,
-      windowHeight * 0.95, // Adjust the position to be slightly below the area where balls are rendered
-      windowWidth - 10,
-      windowHeight * 0.9,
+      windowHeight + (windowHeight / 2) - 75, // Adjust the position to be slightly below the area where balls are rendered
+      windowWidth * 0.9,
+      windowHeight,
       {
         isStatic: true,
         render: {
@@ -96,9 +136,26 @@ function draw() {
 
     //ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-10, windowWidth, 20, {isStatic: true})
     //Matter.World.add(world, ground);
-    
+    }
 }
 
+function mousePressed() {
+  for (var ball of fusion.getBalls()) {
+    ball.mousePressed();
+  }
+}
+
+function mouseDragged() {
+  for (var ball of fusion.getBalls()) {
+    ball.mouseDragged();
+  }
+}
+
+function mouseReleased() {
+  for (var ball of fusion.getBalls()) {
+    ball.mouseReleased();
+  }
+}
 
 
 function mouseClicked() {
@@ -116,6 +173,7 @@ function mouseClicked() {
     //Kimmeridge
     console.log("Kimmeridge")
   }
+  
 }
 
 function checkBuilding(building) {
@@ -146,6 +204,14 @@ function addBall(type, building) {
 
 //Sustainability Scores
 function checkSustainability() {
-  //Check if the buildings are sustainable
-  
+    //Check if the buildings are sustainable
+    let xhr = new XMLHttpRequest()
+    xhr.open('GET', '/sustainability', false)
+    xhr.send()
+    if (xhr.status === 200) {
+        let res = JSON.parse(xhr.responseText)
+        return res
+    } else {
+        alert("an error occured looking at sustainabilty")
+    }
 }

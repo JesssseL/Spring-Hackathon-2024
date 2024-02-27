@@ -32,3 +32,10 @@ def budget(building: str):
             return {"vals": mean_vals, "total": round(sum(mean_vals.values()), 2)}
     except FileNotFoundError as e:
         return 404
+
+
+# def get_sustainability(building: str):
+#     try: 
+#         with open(f"data/{building}.csv") as f:
+#             file_data = pd.read_csv(f)
+#             return round(np.mean(file_data["sustainability"]), 2)

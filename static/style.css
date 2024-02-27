@@ -1,11 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
 
-.center {
-  text-align: center;
-  color: #3ca386;
-  font-family: dm sans;
+/* ----------- 
+Colour Pallet 
+ ----------- */
+:root{
+  --Zomp: #0DA486;
+  --RobinEggBlue: #33C7BC;
+  --YellowGreen: #8ACC3D;
+  --TeaGreen: #D0E89E;
+  --HoneyDew: #F0FFF3;
+  
 }
 
-p {
-  color: #68d4b6;
+/* ----------- 
+      HTML
+ ----------- */
+.center {
+  text-align: center;
+  color: var(--Zomp);
+  font-family: "Comic Neue", cursive;
+}
+
+#levelInfo {
+  color: var(--TeaGreen);
+}
+
+button {
+  background: white;
+  border-width: medium; 
+  /* You can have 'thick' 'medium' or '[number]px'*/
+  border-style: solid;
+  border-color: skyblue;
+  font-family: "DM Sans", sans-serif;
+}
+
+button:active {
+    background: #cccccc;
 }
