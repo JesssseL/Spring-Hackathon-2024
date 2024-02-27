@@ -17,6 +17,7 @@ let HoneyDew = '#F0FFF3';
 
 // Matter.js
 let engine;
+let render;
 let world;
 let ground;
 
@@ -33,9 +34,44 @@ function setup() {
   //p5.js
   createCanvas(windowWidth-10, windowHeight*0.8);
   //Matter.js
-  engine = Matter.Engine.create();
-  world = engine.world;
+  engine = Matter.Engine.create(); // HELLO ANDREW!!!
+  world = engine.world; 
+  render = Matter.Render.create({
+      element: document.body,
+      engine: engine,
+      options: {
+          width: windowWidth,
+          height: windowHeight,
+          wireframes: false, // Set to true for wireframe rendering if needed
+          showAxes: true, // Show axes
+          showAngleIndicator: true, // Show angle indicator
+          showCollisions: true, // Show collision points
+          showConvexHulls: true, // Show convex hulls of bodies
+          showPositions: true, // Show positions of bodies
+          showBounds: true, // Show bounding boxes of bodies
+          showVelocity: true, // Show velocity of bodies
+          showIds: true // Show IDs of bodies
+      }
+  });
   Matter.Runner.run(engine);
+  Matter.Render.lookAt(render, {
+    min: { x: 0, y: 0},
+    max: { x: windowWidth, y: windowHeight }
+  });
+
+// oh andrew btw, the balls seem to be half broke in some browsers, so i have no clue why or what to do xD like macos doesnt work, but replit on macos does xD tried both chrome and safari im so confused
+
+// oh, yeah thats odd lol
+
+    // i think they appear, then all fly up towards the top left hand corner... so reverse gravity idk how or why xD 
+
+  // very weird, yeah neither 
+
+  //i also realised that p5 uses the top left and 0,0 coords and matter uses the centre of the canvas, thats caused so many issues today
+
+    // AHHH ok well that makes so much sense i attempted to fix it, but just was not doing what i wanted it to do xD was very confused
+
+    // yeah its taken me forever to realise thats the issue lol
 
   // Get Budget & Sustainability Data
     let budgetData = checkBudgets();

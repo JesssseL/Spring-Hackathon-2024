@@ -43,8 +43,5 @@ def budget(building: str):
 
 # Get the sustainability data for a given building
 def sustainable(building: str):
-    return random.randint(0,100) # TODO: make not random values
-    # try: 
-    #     with open(f"data/{building}.csv") as f:
-    #         file_data = pd.read_csv(f)
-    #         return round(np.mean(file_data["sustainability"]), 2)
+    # This is a base sustainability value - used in the game to set starting point of buildings
+    return random.randint(0,80) 
