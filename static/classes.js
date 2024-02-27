@@ -11,15 +11,13 @@ class Building {
     this.size = size;
     this.budget = budget;
     this.balls = [];
-    //this.body = Matter.Bodies.rectangle(x, y, size, size, {isStatic: true});
-    //Matter.World.add(world, this.body);
+    this.body = Matter.Bodies.rectangle(x, y, size, size, {isStatic: true});
+    Matter.World.add(world, this.body);
   }
   //Returning private variables
   getCode() { return this.code; }
   getX() { return this.x; }
   getY() { return this.y; }
-  setX(x) { this.x = x; }
-  setY(y) { this.y = y; }
   getBudget() { return this.budget; }
   getSize() { return this.size; }
   //Methods
@@ -27,9 +25,9 @@ class Building {
   getBalls() { return this.balls; }
   addBall(ball) { this.balls.push(ball); }
   update() {
-    //this.x = this.body.position.x;
-    //this.y = this.body.position.y;
-    //Matter.Body.setPosition(this.body, { x: this.x, y: this.y });
+    this.x = this.body.position.x;
+    this.y = this.body.position.y;
+    Matter.Body.setPosition(this.body, { x: this.x, y: this.y });
     this.draw();
   }
 }

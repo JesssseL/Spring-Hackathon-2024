@@ -31,7 +31,7 @@ let kimmeridge;
 const GAP = 20;
 function setup() {
   //p5.js
-  createCanvas(windowWidth-10, windowHeight*0.9);
+  createCanvas(windowWidth-10, windowHeight*0.8);
   //Matter.js
   engine = Matter.Engine.create();
   world = engine.world;
@@ -57,14 +57,20 @@ function setup() {
   //Reset Button
   let button;  
   button = createButton('Try Again?');
-  button.position(5, 65);
+  button.position(25, 45);
   button.mousePressed(resetTime);
+
+  let nightModeButton;  
+  nightModeButton= createButton('🌚?');
+  nightModeButton.position(windowW-(25+nightModeButton.width), 45);
+  nightModeButton.mousePressed(resetTime);
 }
 function resetTime() {
   //set current time to 0
   if (currentTime > 120) {
     currentTime = 0
     sayNo = 0
+    
   } else {
     sayNo = 50
     console.log ('Are you even gonna try?')
@@ -74,6 +80,9 @@ function resetTime() {
 }
 function buttonReact() {
   if(sayNo >= 1){
+    if(sayNo >= 45){
+    background('#f4c0b4');
+    }
     //if on
     textSize(200);
     let newColor = color(Zomp); //staring Color
@@ -116,8 +125,8 @@ function draw() {
 
     let bounds = Matter.Bodies.rectangle(
       windowWidth / 2,
-      windowHeight + (windowHeight / 2) - 75, // Adjust the position to be slightly below the area where balls are rendered
-      windowWidth * 0.9,
+      windowHeight * 0.8 + (windowHeight / 2) - 75, // Adjust the position to be slightly below the area where balls are rendered
+      windowWidth + 75,
       windowHeight,
       {
         isStatic: true,
