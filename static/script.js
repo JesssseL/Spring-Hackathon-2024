@@ -37,13 +37,18 @@ function setup() {
   world = engine.world;
   Matter.Runner.run(engine);
 
+  // Get Budget & Sustainability Data
+    let budgetData = checkBudgets();
+    let sustainabilityData = checkSustainability();
+    
   //Buildings
-  fusion = new Building('F', GAP, boxHeight, (windowW/100)*10, 1000);
-  pooleGateway = new Building('PG', fusion.getX() + fusion.getSize() + GAP, boxHeight, (windowW/100)*25, 1000);
-  dorsetHouse = new Building('D', pooleGateway.getX() + pooleGateway.getSize() + GAP, boxHeight, (windowW/100)*15, 1000);
-  kimmeridge = new Building('K', dorsetHouse.getX() + dorsetHouse.getSize() + GAP, boxHeight, (windowW/100)*20, 1000);
+  fusion = new Building('F', GAP, boxHeight, (windowW/100)*10, budgetData["fusion"], sustainabilityData["fusion"]);
+  pooleGateway = new Building('PG', fusion.getX() + fusion.getSize() + GAP, boxHeight, (windowW/100)*25, budgetData["pgb"], sustainabilityData["pgb"]);
+  dorsetHouse = new Building('D', pooleGateway.getX() + pooleGateway.getSize() + GAP, boxHeight, (windowW/100)*15, budgetData["dorset_house"], sustainabilityData["dorset_house"]);
+  kimmeridge = new Building('K', dorsetHouse.getX() + dorsetHouse.getSize() + GAP, boxHeight, (windowW/100)*20, budgetData["kimmeridge"], sustainabilityData["kimmeridge"]);
 
   //⚽✨🏀✨⚾✨🏈 ADD BALLS HERE 🏉✨🏐✨⚾✨🥎  
+    console.log("new ballz")
   for (b=0; b<=10; b++) { 
     addBall('G', fusion); //gas
   }
@@ -53,6 +58,7 @@ function setup() {
   for (b=0; b<=10; b++) {
     addBall('E', fusion); //electric
   }
+    console.log("ballz added")
 
   //Reset Button
   let button;  
@@ -75,7 +81,6 @@ function resetTime() {
     sayNo = 50
     console.log ('Are you even gonna try?')
     
-    //window.alert('Are you even gonna try?')
   } 
 }
 function buttonReact() {
@@ -113,7 +118,7 @@ function draw() {
       fill(255,0,0);
       textSize(50);
       text('💥', windowWidth/2, windowHeight/2);
-      //Dan attemting to code here
+      //Loss Sequence here
     } else {
       
     //🏢 Drawing Buildings 🏢
@@ -125,14 +130,14 @@ function draw() {
 
     let bounds = Matter.Bodies.rectangle(
       windowWidth / 2,
-      windowHeight * 0.8 + (windowHeight / 2) - 75, // Adjust the position to be slightly below the area where balls are rendered
+      windowHeight * 0.9 + (windowHeight * 0.5) - 120, // Adjust the position to be slightly below the area where balls are rendered
       windowWidth + 75,
       windowHeight,
       {
         isStatic: true,
         render: {
-          fillStyle: 'transparent', // Make the bounding box transparent
-          strokeStyle: 'none' // Disable stroke for the bounding box
+          fillStyle: 'red', // Make the bounding box transparent
+          strokeStyle: 'blue' // Disable stroke for the bounding box
         }
       }
     );
@@ -143,8 +148,8 @@ function draw() {
     }
 
 
-    //ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-10, windowWidth, 20, {isStatic: true})
-    //Matter.World.add(world, ground);
+    // ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-20, windowWidth, 20, {isStatic: true})
+    // Matter.World.add(world, ground);
     }
 }
 
@@ -196,7 +201,7 @@ function checkBuilding(building) {
 
 function addBall(type, building) {
   //Adds a ball to the building
-  if (building.getBudget() > building.getBalls().length) {
+  if (building.getBudget()["total"] > building.getBalls().length) {
     // enough capacity
     //🛸TYPE, BUILDING, GRAVITY(TRUE???)🛸
     let ball = new Ball(type, building);
@@ -211,16 +216,32 @@ function addBall(type, building) {
   }
 }
 
-//Sustainability Scores
-function checkSustainability() {
-    //Check if the buildings are sustainable
+function getData(url) {
+    //Skeleton get data
     let xhr = new XMLHttpRequest()
-    xhr.open('GET', '/sustainability', false)
-    xhr.send()
+    xhr.open('GET', url, false) // Set the method & route for the request
+    xhr.send() // Trigger the send request
     if (xhr.status === 200) {
+        // If Successful
         let res = JSON.parse(xhr.responseText)
         return res
+        // Returns JSON from the URL
+
     } else {
-        alert("an error occured looking at sustainabilty")
+        // If anything but successful
+        alert(`An error occured while trying to look at: ${url}. Pls tell james he done a silly`)
     }
+}
+
+//Sustainability Scores
+function checkSustainability() {
+    return getData('/sustainability')
+}
+
+function checkBudgets() {
+    return getData('/budgets')
+}
+
+function getProjects() {
+    return getData('/projects')
 }

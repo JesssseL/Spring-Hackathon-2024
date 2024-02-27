@@ -4,13 +4,14 @@
 
 //Buildings
 class Building {
-  constructor(code, x, y, size, budget) {
+  constructor(code, x, y, size, budget, sustain) {
     this.code = code;
     this.x = x;
     this.y = y;
     this.size = size;
     this.budget = budget;
     this.balls = [];
+    this.sustainability = sustain;
     this.body = Matter.Bodies.rectangle(x, y, size, size, {isStatic: true});
     Matter.World.add(world, this.body);
   }
@@ -23,7 +24,7 @@ class Building {
   //Methods
   draw() { return square(this.x, this.y, this.size); }
   getBalls() { return this.balls; }
-  addBall(ball) { this.balls.push(ball); }
+  addBall(ball) { this.balls.push(ball) }
   update() {
     this.x = this.body.position.x;
     this.y = this.body.position.y;
@@ -111,6 +112,7 @@ class Ball {
     }
   }
   bounce(building){
+      console.log("BOUNCED")
     //Bounce the ball off the building when the building is at capacity
     if (this.y >= building.getY()-20) {
       //ball not yet at top of building
