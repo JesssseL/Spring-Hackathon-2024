@@ -29,8 +29,9 @@ let kimmeridge;
 
 
 //Makings Building
+const START = 75;
 const GAP = 20;
-const START = 100;
+const MAX = ((windowW/100));
 function setup() {
   //p5.js
   createCanvas(windowWidth-25, windowHeight*0.8);
@@ -65,20 +66,34 @@ function setup() {
     let sustainabilityData = checkSustainability();
     
   //Buildings
-  fusion = new Building('F', GAP, boxHeight, (windowW/100)*10, budgetData["fusion"], sustainabilityData["fusion"]);
-  pooleGateway = new Building('PG', fusion.getX() + fusion.getSize() + GAP, boxHeight, (windowW/100)*25, budgetData["pgb"], sustainabilityData["pgb"]);
-  dorsetHouse = new Building('D', pooleGateway.getX() + pooleGateway.getSize() + GAP, boxHeight, (windowW/100)*15, budgetData["dorset_house"], sustainabilityData["dorset_house"]);
-  kimmeridge = new Building('K', dorsetHouse.getX() + dorsetHouse.getSize() + GAP, boxHeight, (windowW/100)*20, budgetData["kimmeridge"], sustainabilityData["kimmeridge"]);
+  // Constants
+  const GAP = (windowW-100)/ (4 + 3); // 4 buildings, 5 gaps
+  let currentX = GAP; // Start with a gap
+
+  // Buildings - Adjusted for simplicity
+  fusion = new Building('F', currentX, boxHeight, MAX*5, budgetData["fusion"], sustainabilityData["fusion"]);
+  currentX += fusion.getSize() + GAP;
+
+  pooleGateway = new Building('PG', currentX, boxHeight, MAX*15, budgetData["pgb"], sustainabilityData["pgb"]);
+  currentX += pooleGateway.getSize() + GAP;
+
+  dorsetHouse = new Building('D', currentX, boxHeight, MAX*10, budgetData["dorset_house"], sustainabilityData["dorset_house"]);
+  currentX += dorsetHouse.getSize() + GAP;
+
+  kimmeridge = new Building('K', currentX, boxHeight, MAX*5, budgetData["kimmeridge"], sustainabilityData["kimmeridge"]);
+
+  // There you go, babe!
+  // Sweet and simple, love.
 
   //⚽✨🏀✨⚾✨🏈 ADD BALLS HERE 🏉✨🏐✨⚾✨🥎  
     console.log("new ballz")
-  for (b=0; b<=100; b++) { 
+  for (b=0; b<=10; b++) { 
     addBall('G', fusion); //gas
   }
-  for (b=0; b<=100; b++) {
+  for (b=0; b<=10; b++) {
     addBall('W', fusion); //water
   }
-  for (b=0; b<=100; b++) {
+  for (b=0; b<=10; b++) {
     addBall('E', fusion); //electric
   }
     console.log("ballz added")
@@ -88,11 +103,6 @@ function setup() {
   button = createButton('Try Again?');
   button.position(75, 45);
   button.mousePressed(resetTime);
-
-  let nightModeButton;  
-  nightModeButton= createButton('🌚?');
-  nightModeButton.position(windowW-(75+nightModeButton.width), 45);
-  nightModeButton.mousePressed(resetTime);
 }
 function resetTime() {
   //set current time to 0

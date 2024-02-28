@@ -15,6 +15,9 @@ Colour Pallet
 /* ----------- 
       HTML
  ----------- */
+body {
+  background-color: var(--YellowGreen);
+}
 .center {
   text-align: center;
   color: var(--Zomp);
