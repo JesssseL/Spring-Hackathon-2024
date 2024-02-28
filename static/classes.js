@@ -1,23 +1,7 @@
 /*
  *  Class definitions
  */
-let BBsad;
-let BBok;
-let BBamaze;
-let BBworry;
-function preload() {
-  BBsad = loadImage('static/BB/depression.PNG');
-  BBok = loadImage('static/BB/happy.PNG');
-  BBamaze = loadImage('static/BB/yippee.PNG');
-  BBworry = loadImage('static/BB/anxiety.PNG');
-}
-//BB the Bucket Bot
-let BucketBotArr = {
-  sad: BBsad,
-  happy: BBok,
-  good: BBamaze,
-  worry: BBworry,
-}
+
 
 class BucketBot {
   costructor(type) {
@@ -100,9 +84,9 @@ class Building {
 
 //Ball
 class Ball {
-  constructor(type, building, size) {
-    this.x = 300;
-    this.y = 100;
+  constructor(type, building, size, x, y) {
+    this.x = x;
+    this.y = y;
     this.type = type;
     this.building = building;
     this.size = size;
@@ -152,12 +136,16 @@ class Ball {
   }
 
   ballClicked() {
-    
+    console.log("ball clicked is called")
     let pos = this.body.position;
     let r = this.size / 2;
+      console.log(`${mouseX}, ${mouseY}, ${pos.x}, ${pos.y}`)
+      console.log(`Dist ${dist(mouseX, mouseY, pos.x, pos.y)} and 2r=${r*2}`)
     if (dist(mouseX, mouseY, pos.x, pos.y) < r) {
+        console.log("ball IS clicked")
       return true;
     } else {
+        console.log("ball is NOT clicked")
       return false;
     }
   }

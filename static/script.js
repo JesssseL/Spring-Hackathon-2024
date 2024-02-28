@@ -6,6 +6,7 @@ const waterCost = 370; // type = 'W'
 const electricCost = 45; // type = 'E'
 const gasCost = 10.7; // type = 'G'
 let windowW = window.innerWidth;
+let windowH = (window.innerHeight)*0.8
 const LEVEL_TIME = 2000;
 let currentTime = 0
 const boxHeight = 200;
@@ -233,8 +234,8 @@ function draw() {
 
     let thickness = 5;
       
-      let leftWall = Matter.Bodies.rectangle(-(windowWidth), windowHeight, thickness, windowHeight, { isStatic: true });
-      let rightWall = Matter.Bodies.rectangle(windowWidth, windowHeight, thickness, windowHeight, { isStatic: true });
+      let leftWall = Matter.Bodies.rectangle(20, 0, 10, windowHeight * 2, { isStatic: true });
+      let rightWall = Matter.Bodies.rectangle(windowWidth - 42, 0, 10, windowHeight * 2, { isStatic: true });
 
       Matter.World.add(world, leftWall);
       Matter.World.add(world, rightWall);
@@ -247,7 +248,8 @@ function draw() {
     // ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-20, windowWidth, 20, {isStatic: true})
     // Matter.World.add(world, ground);
     }
-  image(BBok, 80, 80, 200, 200);
+  // Calculate the proportional height
+  drawBB()
 }
 
 
@@ -255,43 +257,44 @@ function draw() {
 
 function mouseClicked() {
   //Check if mouse is over a building and react appropriatly ***COUGH COUGH ANDREW*** ahew sorry, what was that?
-  if (checkBuilding(fusion)) {
-    //Fusion
-    console.log("Fusion")
-    for (var ball of allBalls) {
-      ball.mousePressed();
-      if (ball.ballClicked()) {
-        ball.setBuilding(fusion);
-      }
-    }
-  } else if (checkBuilding(pooleGateway)) {
-    //Poole Gateway
-    console.log("Poole Gateway")
-    for (var ball of allBalls) {
-      ball.mousePressed();
-      if (ball.ballClicked()) {
-        ball.setBuilding(pooleGateway);
-      }
-    }
-  } else if (checkBuilding(dorsetHouse)) {
-    //Dorset House
-    console.log("Dorset House")
-    for (var ball of allBalls) {
-      ball.mousePressed();
-      if (ball.ballClicked()) {
-        ball.setBuilding(dorsetHouse);
-      }
-    }
-  } else if (checkBuilding(kimmeridge)) {
-    //Kimmeridge
-    console.log("Kimmeridge")
-    for (var ball of allBalls) {
-      ball.mousePressed();
-      if (ball.ballClicked()) {
-        ball.setBuilding(kimmeridge);
-      }
-    }
-  }
+  // if (checkBuilding(fusion)) {
+  //   //Fusion
+  //   console.log("Fusion")
+  //   for (var ball of allBalls) {
+  //     ball.mousePressed();
+  //     if (ball.ballClicked()) {
+  //       ball.setBuilding(fusion);
+  //     }
+  //   }
+  // } else if (checkBuilding(pooleGateway)) {
+  //   //Poole Gateway
+  //   console.log("Poole Gateway")
+  //   for (var ball of allBalls) {
+  //     ball.mousePressed();
+  //     if (ball.ballClicked()) {
+  //       ball.setBuilding(pooleGateway);
+  //     }
+  //   }
+  // } else if (checkBuilding(dorsetHouse)) {
+  //   //Dorset House
+  //   console.log("Dorset House")
+  //   for (var ball of allBalls) {
+  //     ball.mousePressed();
+  //     if (ball.ballClicked()) {
+  //       ball.setBuilding(dorsetHouse);
+  //     }
+  //   }
+  // } else if (checkBuilding(kimmeridge)) {
+  //   //Kimmeridge
+  //   console.log("Kimmeridge")
+  //   for (var ball of allBalls) {
+  //     ball.mousePressed();
+  //     if (ball.ballClicked()) {
+  //       ball.setBuilding(kimmeridge);
+  //     }
+  //   }
+  // }
+    console.log("scriptjs mouse clicked")
   
 }
 
@@ -304,15 +307,12 @@ function mousePressed() {
 }
 
 function mouseDragged() {
-  console.log("Dragged")
   for (var ball of fusion.getBalls()) {
     ball.mouseDragged();
   }
 }
 
 function mouseReleased() {
-  event.preventDefault();
-  //console.log("release called")
   for (var ball of fusion.getBalls()) {
     ball.mouseReleased();
   }
@@ -334,24 +334,19 @@ function addBall(type, building, size) {
     if (building.getBudget()["total"] > building.getBalls().length) {
       // enough capacity
       //🛸TYPE, BUILDING, GRAVITY(TRUE???)🛸
-      let ball = new Ball(type, building, size);
-      ball.setX(100);
-      ball.setY(100);
+      let ball = new Ball(type, building, size, windowWidth-100, 250);
+
       building.addBall(ball);
       allBalls.push(ball);
     
     } else {
       // not enough capacity
       //🛸TYPE, BUILDING, GRAVITY(FALSE??)🛸
-      let ball = new Ball(type, null, size);
-      ball.setX(100);
-      ball.setY(100);
+      let ball = new Ball(type, null, size, windowWidth-100, 250);
       allBalls.push(ball);
     }
   } else {
-    let ball = new Ball(type, null, size);
-    ball.setX(100);
-    ball.setY(100);
+    let ball = new Ball(type, null, size, windowWidth-100, 250);
     allBalls.push(ball);
   }
 }
