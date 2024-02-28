@@ -11,6 +11,16 @@ const LEVEL_TIME = 2000;
 let currentTime = 0
 const boxHeight = 200;
 let sayNo;
+let graphCoOrds = [0, 0, 0, 0];
+// Constants
+const FUSION_SIZE = 10;
+const POOLE_SIZE = 15;
+const DORSET_SIZE = 10;
+const KIMME_SIZE = 10;
+graphCoOrds[10] = FUSION_SIZE
+graphCoOrds[11] = POOLE_SIZE
+graphCoOrds[12] = DORSET_SIZE
+graphCoOrds[13] = KIMME_SIZE
 
 let DEVMODE = false; // true = test balls, false = normal balls
 
@@ -92,25 +102,24 @@ function setup() {
     let projects = getProjects();
     
   //Buildings
-  // Constants
-  const FUSION_SIZE = 10;
-  const POOLE_SIZE = 15;
-  const DORSET_SIZE = 10;
-  const KIMME_SIZE = 10;
   const GAP = (windowW-100)/ ((FUSION_SIZE+POOLE_SIZE+DORSET_SIZE+KIMME_SIZE) * 1.15); // 4 buildings, 5 gaps
   let currentX = GAP + 50; // Start with a gap
 
   // Buildings - Adjusted for simplicity
   fusion = new Building('F', currentX, boxHeight, GAP*FUSION_SIZE, budgetData["fusion"], sustainabilityData["fusion"]);
+  graphCoOrds[0] = currentX
   currentX += fusion.getSize() + GAP;
-
+  
   pooleGateway = new Building('PG', currentX, boxHeight, GAP*POOLE_SIZE, budgetData["pgb"], sustainabilityData["pgb"]);
+  graphCoOrds[1] = currentX
   currentX += pooleGateway.getSize() + GAP;
 
   dorsetHouse = new Building('D', currentX, boxHeight, GAP*DORSET_SIZE, budgetData["dorset_house"], sustainabilityData["dorset_house"]);
+  graphCoOrds[2] = currentX
   currentX += dorsetHouse.getSize() + GAP;
 
   kimmeridge = new Building('K', currentX, boxHeight, GAP*KIMME_SIZE, budgetData["kimmeridge"], sustainabilityData["kimmeridge"]);
+  graphCoOrds[3] = currentX
 
   // There you go, babe!
   // Sweet and simple, love.
@@ -240,6 +249,16 @@ function draw() {
     pooleGateway.update();
     dorsetHouse.update();
     kimmeridge.update();
+
+    //📊 Drawing Graphs 📊
+    for (b=0; b<=3; b++){
+      //graphCoOrds
+      fill(TeaGreen);
+      rect(graphCoOrds[b] + GAP, boxHeight + GAP, GAP, (GAP*graphCoOrds[b+10])-(GAP*3));
+      fill('white');
+      rect(graphCoOrds[b] + GAP, boxHeight + GAP, GAP, ((GAP*graphCoOrds[b+10])-(GAP*3))*0.8);
+    }
+      
 
     let bounds = Matter.Bodies.rectangle(
       windowWidth / 2,
@@ -399,9 +418,23 @@ function getData(url) {
     }
 }
 
+
+
+
 //Sustainability Scores
 function checkSustainability() {
-    return getData('/sustainability')
+    let default_vals = getData("/sustainability")
+    let sus_level = {}
+    for (let current_ball of allBalls) {
+        let current_building = current_ball.getBuilding()
+        if (current_building != null) {
+            let current_default = default_vals[current_building.code]
+        } else {
+            alert("something brokey in the sustainability stuff")
+        }
+    }
+    // return getData('/sustainability')
+    return sus_levels;
 }
 
 function checkBudgets() {

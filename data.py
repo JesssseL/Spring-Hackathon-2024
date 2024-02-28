@@ -43,7 +43,7 @@ def budget(building: str):
 
 
 # Get the sustainability data for a given building
-def sustainable(building: str):
+def sustainable():
     # This is a base sustainability value - used in the game to set starting point of buildings
     return random.randint(0,80) 
 
