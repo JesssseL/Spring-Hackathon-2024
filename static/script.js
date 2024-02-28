@@ -27,6 +27,8 @@ let pooleGateway;
 let dorsetHouse;
 let kimmeridge;
 
+// All balls
+let allBalls = [];
 
 //Makings Building
 const START = 75;
@@ -35,6 +37,7 @@ const MAX = ((windowW/100));
 function setup() {
   //p5.js
   createCanvas(windowWidth-25, windowHeight*0.8);
+  
   //Matter.js
   engine = Matter.Engine.create(); // HELLO ANDREW!!!
   world = engine.world; 
@@ -67,27 +70,31 @@ function setup() {
     
   //Buildings
   // Constants
-  const GAP = (windowW-100)/ (4 + 3); // 4 buildings, 5 gaps
-  let currentX = GAP; // Start with a gap
+  const FUSION_SIZE = 10;
+  const POOLE_SIZE = 15;
+  const DORSET_SIZE = 10;
+  const KIMME_SIZE = 10;
+  const GAP = (windowW-100)/ ((FUSION_SIZE+POOLE_SIZE+DORSET_SIZE+KIMME_SIZE) * 1.15); // 4 buildings, 5 gaps
+  let currentX = GAP + 50; // Start with a gap
 
   // Buildings - Adjusted for simplicity
-  fusion = new Building('F', currentX, boxHeight, MAX*5, budgetData["fusion"], sustainabilityData["fusion"]);
+  fusion = new Building('F', currentX, boxHeight, GAP*FUSION_SIZE, budgetData["fusion"], sustainabilityData["fusion"]);
   currentX += fusion.getSize() + GAP;
 
-  pooleGateway = new Building('PG', currentX, boxHeight, MAX*15, budgetData["pgb"], sustainabilityData["pgb"]);
+  pooleGateway = new Building('PG', currentX, boxHeight, GAP*POOLE_SIZE, budgetData["pgb"], sustainabilityData["pgb"]);
   currentX += pooleGateway.getSize() + GAP;
 
-  dorsetHouse = new Building('D', currentX, boxHeight, MAX*10, budgetData["dorset_house"], sustainabilityData["dorset_house"]);
+  dorsetHouse = new Building('D', currentX, boxHeight, GAP*DORSET_SIZE, budgetData["dorset_house"], sustainabilityData["dorset_house"]);
   currentX += dorsetHouse.getSize() + GAP;
 
-  kimmeridge = new Building('K', currentX, boxHeight, MAX*5, budgetData["kimmeridge"], sustainabilityData["kimmeridge"]);
+  kimmeridge = new Building('K', currentX, boxHeight, GAP*KIMME_SIZE, budgetData["kimmeridge"], sustainabilityData["kimmeridge"]);
 
   // There you go, babe!
   // Sweet and simple, love.
 
   //⚽✨🏀✨⚾✨🏈 ADD BALLS HERE 🏉✨🏐✨⚾✨🥎  
     console.log("new ballz")
-  for (b=0; b<=10; b++) { 
+  for (b=0; b<=500; b++) { 
     addBall('G', fusion); //gas
   }
   for (b=0; b<=10; b++) {
@@ -147,6 +154,8 @@ function draw() {
   frameRate(60);
   background(RobinEggBlue);
 
+  //translate(windowWidth/2, windowHeight/2);
+
   buttonReact()
 
   //------UI Elements------
@@ -168,9 +177,9 @@ function draw() {
   rect(25,133,windowW-75,windowHeight-325);
 
   //🕖 Time Bar 🕖
-  fill(TeaGreen);
+  fill('white');
   rect(50,120,windowW-125,25, 25);
-  fill(Zomp);
+  fill(YellowGreen);
   rect(50,120,(((windowW-125)/LEVEL_TIME)*currentTime),25, 25);
   currentTime++
 
@@ -223,17 +232,62 @@ function mouseClicked() {
   if (checkBuilding(fusion)) {
     //Fusion
     console.log("Fusion")
+    for (var ball of allBalls) {
+      ball.mousePressed();
+      if (ball.ballClicked()) {
+        ball.setBuilding(fusion);
+      }
+    }
   } else if (checkBuilding(pooleGateway)) {
     //Poole Gateway
     console.log("Poole Gateway")
+    for (var ball of allBalls) {
+      ball.mousePressed();
+      if (ball.ballClicked()) {
+        ball.setBuilding(pooleGateway);
+      }
+    }
   } else if (checkBuilding(dorsetHouse)) {
     //Dorset House
     console.log("Dorset House")
+    for (var ball of allBalls) {
+      ball.mousePressed();
+      if (ball.ballClicked()) {
+        ball.setBuilding(dorsetHouse);
+      }
+    }
   } else if (checkBuilding(kimmeridge)) {
     //Kimmeridge
     console.log("Kimmeridge")
+    for (var ball of allBalls) {
+      ball.mousePressed();
+      if (ball.ballClicked()) {
+        ball.setBuilding(kimmeridge);
+      }
+    }
+  } else {
+    for (var ball of allBalls) {
+      if (ball.ballClicked()) {
+        ball.mousePressed();
+        ball.setBuilding(null);
+      }
+    }
   }
   
+}
+
+function mouseDragged() {
+  for (var ball of fusion.getBalls()) {
+    ball.mouseDragged();
+  }
+}
+
+function mouseReleased() {
+  event.preventDefault();
+  //console.log("release called")
+  for (var ball of fusion.getBalls()) {
+    ball.mouseReleased();
+  }
 }
 
 function checkBuilding(building) {
@@ -250,15 +304,16 @@ function addBall(type, building) {
   if (building.getBudget()["total"] > building.getBalls().length) {
     // enough capacity
     //🛸TYPE, BUILDING, GRAVITY(TRUE???)🛸
-    let ball = new Ball(type, building);
+    let ball = new Ball(type, building, 10 + (Math.random() * 10));
     ball.setX(100);
     ball.setY(100);
     building.addBall(ball);
+    allBalls.push(ball);
     
   } else {
     // not enough capacity
     //🛸TYPE, BUILDING, GRAVITY(FALSE??)🛸
-    let ball = new Ball(type, null);
+    let ball = new Ball(type, null, 10 + (Math.random() * 10));
   }
 }
 
