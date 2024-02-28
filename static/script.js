@@ -8,7 +8,7 @@ let currentTime = 0
 const boxHeight = 200;
 let sayNo;
 
-let DEVMODE = true;
+let DEVMODE = true; // true = test balls, false = normal balls
 
 //Colour
 let Zomp = '#0DA486';
@@ -98,7 +98,7 @@ function setup() {
   //⚽✨🏀✨⚾✨🏈 ADD BALLS HERE 🏉✨🏐✨⚾✨🥎
 
   if (DEVMODE) {
-    for (b=0; b<=500; b++) {
+    for (b=0; b<=200; b++) {
       addBall('gas', null, 10 + (Math.random() * 10)); //gas
     }
     for (b=0; b<=10; b++) {
@@ -244,6 +244,7 @@ function draw() {
     // ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-20, windowWidth, 20, {isStatic: true})
     // Matter.World.add(world, ground);
     }
+  image(BBok, 80, 80);
 }
 
 
@@ -287,16 +288,11 @@ function mouseClicked() {
         ball.setBuilding(kimmeridge);
       }
     }
-  } else {
-    for (var ball of allBalls) {
-      if (ball.ballClicked()) {
-        ball.mousePressed();
-        ball.setBuilding(null);
-      }
-    }
   }
   
 }
+
+function mouseP
 
 function mouseDragged() {
   for (var ball of fusion.getBalls()) {

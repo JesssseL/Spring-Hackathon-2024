@@ -1,38 +1,44 @@
 /*
  *  Class definitions
  */
+let BBsad;
+let BBok;
+let BBamaze;
+let BBworry;
 function preload() {
-  img = loadImage('static/BB/depression.jpg');
+  BBsad = loadImage('static/BB/depression.PNG');
+  BBok = loadImage('static/BB/happy.PNG');
+  BBamaze = loadImage('static/BB/yippee.PNG');
+  BBworry = loadImage('static/BB/anxiety.PNG');
 }
 //BB the Bucket Bot
-let BucketBot = []
-BucketBot[0] = {
-  type: "depression",
-  src: "/static/BB/depression.jpg"
-}
-BucketBot[1] = {
-  type: "anxiety",
-  src: "/static/BB/anxiety.jpg"
-}
-BucketBot[2] = {
-  type: "yippee",
-  src: "/static/BB/eeeee.jpg"
-}
-BucketBot[3] = {
-  type: "happy",
-  src: "/static/BB/happy.jpg"
+let BucketBotArr = {
+  sad: BBsad,
+  happy: BBok,
+  good: BBamaze,
+  worry: BBworry,
 }
 
 class BucketBot {
   costructor(type) {
     this.type = type;
-    
+    this.updateSrc();
   }
   updateSrc() {
-    this.src = BucketBot[this.type].src;
+    switch (this.type) {
+      case "depression":
+        this.src = "/static/BB/depression.jpg"
+      case "anxiety":
+        this.src = "/static/BB/anxiety.jpg"
+      case "yippee":
+        this.src = "/static/BB/yippee.jpg"
+      case "happy":
+        this.src = "/static/BB/happy.jpg"
+    }
   }
   setType(type) {
     this.type = type;
+    this.updateSrc();
   }
 }
 
