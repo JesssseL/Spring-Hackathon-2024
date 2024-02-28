@@ -98,7 +98,9 @@ function setup() {
 
   // Get Budget & Sustainability Data
     let budgetData = checkBudgets();
-    let sustainabilityData = checkSustainability();
+    // let default_sustainability = getData("/sustainability")
+    let default_sustainability
+    let sustainabilityData = getData("/sustainability")
     let projects = getProjects();
     
   //Buildings
@@ -423,18 +425,19 @@ function getData(url) {
 
 //Sustainability Scores
 function checkSustainability() {
-    let default_vals = getData("/sustainability")
+    if (default_sustainability == null) { default_sustainability = getData("/sustainability") }
+    // console.log(default_vals)
     let sus_level = {}
     for (let current_ball of allBalls) {
         let current_building = current_ball.getBuilding()
+        console.log(current_building)
         if (current_building != null) {
-            let current_default = default_vals[current_building.code]
-        } else {
-            alert("something brokey in the sustainability stuff")
-        }
+            console.log(default_sustainability[current_building.code])
+            sus_level[current_building.code] = default_sustainability[current_building.code]
+        } 
     }
     // return getData('/sustainability')
-    return sus_levels;
+    return sus_level;
 }
 
 function checkBudgets() {

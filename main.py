@@ -54,7 +54,7 @@ def all_budgets():
 def all_sustainability():
     # Get all sustainability data
     sustain = {}
-    for building in ["PG", "F", "K", "DH"]: # Go through each building and get its sustainability data
+    for building in ["PG", "F", "K", "D"]: # Go through each building and get its sustainability data
         sustain[building] = data.sustainable()
     return sustain
 
