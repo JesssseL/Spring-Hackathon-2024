@@ -22,6 +22,10 @@ app = Flask(__name__,
 def index():  # Main Page
     return render_template('index.html')
 
+@app.route('/dan')
+def dan():
+    return render_template("dan.html")
+
 # ^^ MAIN ROUTE WEHRE BALLS AND BOXES ARE ^^
 
 

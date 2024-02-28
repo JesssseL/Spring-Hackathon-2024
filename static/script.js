@@ -30,9 +30,10 @@ let kimmeridge;
 
 //Makings Building
 const GAP = 20;
+const START = 100;
 function setup() {
   //p5.js
-  createCanvas(windowWidth-10, windowHeight*0.8);
+  createCanvas(windowWidth-25, windowHeight*0.8);
   //Matter.js
   engine = Matter.Engine.create(); // HELLO ANDREW!!!
   world = engine.world; 
@@ -59,20 +60,6 @@ function setup() {
     max: { x: windowWidth, y: windowHeight }
   });
 
-// oh andrew btw, the balls seem to be half broke in some browsers, so i have no clue why or what to do xD like macos doesnt work, but replit on macos does xD tried both chrome and safari im so confused
-
-// oh, yeah thats odd lol
-
-    // i think they appear, then all fly up towards the top left hand corner... so reverse gravity idk how or why xD 
-
-  // very weird, yeah neither 
-
-  //i also realised that p5 uses the top left and 0,0 coords and matter uses the centre of the canvas, thats caused so many issues today
-
-    // AHHH ok well that makes so much sense i attempted to fix it, but just was not doing what i wanted it to do xD was very confused
-
-    // yeah its taken me forever to realise thats the issue lol
-
   // Get Budget & Sustainability Data
     let budgetData = checkBudgets();
     let sustainabilityData = checkSustainability();
@@ -85,13 +72,13 @@ function setup() {
 
   //⚽✨🏀✨⚾✨🏈 ADD BALLS HERE 🏉✨🏐✨⚾✨🥎  
     console.log("new ballz")
-  for (b=0; b<=10; b++) { 
+  for (b=0; b<=100; b++) { 
     addBall('G', fusion); //gas
   }
-  for (b=0; b<=10; b++) {
+  for (b=0; b<=100; b++) {
     addBall('W', fusion); //water
   }
-  for (b=0; b<=10; b++) {
+  for (b=0; b<=100; b++) {
     addBall('E', fusion); //electric
   }
     console.log("ballz added")
@@ -99,12 +86,12 @@ function setup() {
   //Reset Button
   let button;  
   button = createButton('Try Again?');
-  button.position(25, 45);
+  button.position(75, 45);
   button.mousePressed(resetTime);
 
   let nightModeButton;  
   nightModeButton= createButton('🌚?');
-  nightModeButton.position(windowW-(25+nightModeButton.width), 45);
+  nightModeButton.position(windowW-(75+nightModeButton.width), 45);
   nightModeButton.mousePressed(resetTime);
 }
 function resetTime() {
@@ -134,19 +121,47 @@ function buttonReact() {
   }
 }
 
+var el = document.getElementById("pull-chain");
+
+el.addEventListener("click", function() {
+  el.classList.toggle("pulled");
+  if (document.getElementById("dayNight").innerHTML == "Goodnight"){
+    document.getElementById("dayNight").innerHTML = "Good Morning";
+  } else {
+    document.getElementById("dayNight").innerHTML = "Goodnight";
+  }
+}, false);
+
 function draw() {
   //Change Speed Here
   frameRate(60);
-  background(HoneyDew);
+  background(RobinEggBlue);
 
   buttonReact()
 
   //------UI Elements------
-  //🕖 Time Bar 🕖
+  //Title Text + Box
+  fill('white');
+  rect((windowW/2)-200,15,400,90);
   fill(Zomp);
-  rect(0,0,windowW,25);
-  fill(RobinEggBlue);
-  rect(0,0,(windowW/LEVEL_TIME)*currentTime,25);
+  textAlign(CENTER)
+  textSize(40);
+  textStyle(BOLD);
+  textFont("Comic Neue");
+  text('Buckets and Balls', 0, 20, windowW);
+  textSize(25);
+  fill(TeaGreen);
+  text('Level 1 - a normal year at BU', 0, 75, windowW);
+
+  //UI Use Box
+  fill(HoneyDew);
+  rect(25,133,windowW-75,windowHeight-325);
+
+  //🕖 Time Bar 🕖
+  fill(TeaGreen);
+  rect(50,120,windowW-125,25, 25);
+  fill(Zomp);
+  rect(50,120,(((windowW-125)/LEVEL_TIME)*currentTime),25, 25);
   currentTime++
 
   //🏆Win/ 💥Loss
@@ -189,23 +204,7 @@ function draw() {
     }
 }
 
-function mousePressed() {
-  for (var ball of fusion.getBalls()) {
-    ball.mousePressed();
-  }
-}
 
-function mouseDragged() {
-  for (var ball of fusion.getBalls()) {
-    ball.mouseDragged();
-  }
-}
-
-function mouseReleased() {
-  for (var ball of fusion.getBalls()) {
-    ball.mouseReleased();
-  }
-}
 
 
 function mouseClicked() {
