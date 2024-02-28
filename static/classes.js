@@ -84,13 +84,13 @@ class Ball {
     draw(x, y) { 
     this.x = x;
     this.y = y;
-    if (this.type == 'W') {
+    if (this.type == 'water') {
       // blue
       fill(0,0,255);
-    } else if (this.type == 'E') {
+    } else if (this.type == 'electric') {
       // yellow
       fill(255,255,0);
-    } else if (this.type == 'G') {
+    } else if (this.type == 'gas') {
       // purple
       fill(255,0,255);
     }

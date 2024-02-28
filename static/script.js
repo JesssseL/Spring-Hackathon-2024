@@ -8,6 +8,8 @@ let currentTime = 0
 const boxHeight = 200;
 let sayNo;
 
+let DEVMODE = true;
+
 //Colour
 let Zomp = '#0DA486';
 let RobinEggBlue = '#33C7BC';
@@ -67,6 +69,7 @@ function setup() {
   // Get Budget & Sustainability Data
     let budgetData = checkBudgets();
     let sustainabilityData = checkSustainability();
+    let projects = getProjects();
     
   //Buildings
   // Constants
@@ -92,18 +95,29 @@ function setup() {
   // There you go, babe!
   // Sweet and simple, love.
 
-  //⚽✨🏀✨⚾✨🏈 ADD BALLS HERE 🏉✨🏐✨⚾✨🥎  
-    console.log("new ballz")
-  for (b=0; b<=500; b++) { 
-    addBall('G', null); //gas
+  //⚽✨🏀✨⚾✨🏈 ADD BALLS HERE 🏉✨🏐✨⚾✨🥎
+
+  if (DEVMODE) {
+    for (b=0; b<=500; b++) {
+      addBall('gas', null, 10 + (Math.random() * 10)); //gas
+    }
+    for (b=0; b<=10; b++) {
+      addBall('water', null, 10 + (Math.random() * 10)); //water
+    }
+    for (b=0; b<=10; b++) {
+      addBall('electric', null, 10 + (Math.random() * 10)); //electric
+    }
+  } else {
+    for (let project of projects) {
+      // let scale = ( (project["cost"] > 8500) ? 1000 : 10000)
+      let size = Math.log2(project["cost"])*2
+      console.log(size)
+      addBall(project["category"], null, size)
+    }
   }
-  for (b=0; b<=10; b++) {
-    addBall('W', null); //water
-  }
-  for (b=0; b<=10; b++) {
-    addBall('E', null); //electric
-  }
-    console.log("ballz added")
+
+
+
 
   //Reset Button
   let button;  
@@ -307,14 +321,14 @@ function checkBuilding(building) {
   }
 }
 
-function addBall(type, building) {
+function addBall(type, building, size) {
   if (building != null) { 
       alert("building is not null"); 
   //Adds a ball to the building
     if (building.getBudget()["total"] > building.getBalls().length) {
       // enough capacity
       //🛸TYPE, BUILDING, GRAVITY(TRUE???)🛸
-      let ball = new Ball(type, building, 10 + (Math.random() * 10));
+      let ball = new Ball(type, building, size);
       ball.setX(100);
       ball.setY(100);
       building.addBall(ball);
@@ -323,13 +337,13 @@ function addBall(type, building) {
     } else {
       // not enough capacity
       //🛸TYPE, BUILDING, GRAVITY(FALSE??)🛸
-      let ball = new Ball(type, null, 10 + (Math.random() * 10));
+      let ball = new Ball(type, null, size);
       ball.setX(100);
       ball.setY(100);
       allBalls.push(ball);
     }
   } else {
-    let ball = new Ball(type, null, 10 + (Math.random() * 10));
+    let ball = new Ball(type, null, size);
     ball.setX(100);
     ball.setY(100);
     allBalls.push(ball);
