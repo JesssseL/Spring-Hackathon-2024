@@ -175,7 +175,8 @@ function draw() {
   currentTime++
 
   //🏆Win/ 💥Loss
-    if (currentTime >= LEVEL_TIME-10) {
+    if (currentTime >= LEVEL_TIME) {
+      currentTime--
       fill(255,0,0);
       textSize(50);
       text('💥', windowWidth/2, windowHeight/2);
