@@ -1,6 +1,40 @@
 /*
  *  Class definitions
  */
+function preload() {
+  img = loadImage('static/BB/depression.jpg');
+}
+//BB the Bucket Bot
+let BucketBot = []
+BucketBot[0] = {
+  type: "depression",
+  src: "/static/BB/depression.jpg"
+}
+BucketBot[1] = {
+  type: "anxiety",
+  src: "/static/BB/anxiety.jpg"
+}
+BucketBot[2] = {
+  type: "yippee",
+  src: "/static/BB/eeeee.jpg"
+}
+BucketBot[3] = {
+  type: "happy",
+  src: "/static/BB/happy.jpg"
+}
+
+class BucketBot {
+  costructor(type) {
+    this.type = type;
+    
+  }
+  updateSrc() {
+    this.src = BucketBot[this.type].src;
+  }
+  setType(type) {
+    this.type = type;
+  }
+}
 
 //Buildings
 class Building {
