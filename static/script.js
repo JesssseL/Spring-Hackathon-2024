@@ -1,3 +1,6 @@
+// Jess little guy counter
+let jessLittleGuyCounter = 3;
+
 //Setting Building Details
 const waterCost = 370; // type = 'W'
 const electricCost = 45; // type = 'E'
@@ -244,7 +247,7 @@ function draw() {
     // ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-20, windowWidth, 20, {isStatic: true})
     // Matter.World.add(world, ground);
     }
-  image(BBok, 80, 80);
+  image(BBok, 80, 80, 200, 200);
 }
 
 
@@ -292,9 +295,16 @@ function mouseClicked() {
   
 }
 
-function mouseP
+function mousePressed() {
+  for (var ball of allBalls) {
+    if (ball.ballClicked()) {
+      ball.mousePressed();
+    }
+  }
+}
 
 function mouseDragged() {
+  console.log("Dragged")
   for (var ball of fusion.getBalls()) {
     ball.mouseDragged();
   }
