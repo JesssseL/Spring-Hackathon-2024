@@ -33,7 +33,7 @@ let selectedPoint = null;
 
 function setup() {
   //createCanvas(window.innerWidth, window.innerHeight - window.innerHeight / 4);
-  createCanvas(50, 200)
+  createCanvas(200, 200)
   textSize(20);
   angleMode(DEGREES);
   //slider = createSlider(1, 3, 1.5, 0.5);

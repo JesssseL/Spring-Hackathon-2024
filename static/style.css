@@ -4,19 +4,33 @@
 Colour Pallet 
  ----------- */
 :root{
+  /* --Zomp: #0DA486;
+  --RobinEggBlue: #33C7BC;
+  --YellowGreen: #8ACC3D;
+  --TeaGreen: #D0E89E;
+  --HoneyDew: #F0FFF3;  */
+} 
+
+[data-theme="light"]{
   --Zomp: #0DA486;
   --RobinEggBlue: #33C7BC;
   --YellowGreen: #8ACC3D;
   --TeaGreen: #D0E89E;
   --HoneyDew: #F0FFF3;
-  
+}
+[data-theme="dark"]{
+  --Zomp: #274E46;
+  --RobinEggBlue: #3F6563;
+  --YellowGreen: #5B6B40;
+  --TeaGreen: #8F9F5D;
+  --HoneyDew: #81C58D;
 }
 
 /* ----------- 
       HTML
  ----------- */
 body {
-  background-color: var(--YellowGreen);
+  background-color: var(--HoneyDew);
 }
 .center {
   text-align: center;
@@ -71,8 +85,9 @@ button:hover {
   position: absolute;
   right: 70px;
   width: 15px;
+  top: -100px;
   
-  transform: translate (120px, 50%)
+  transform: translate (120px, 100px)
 }
 #pull-chain .chain{
   border-left: 2px dotted #333;

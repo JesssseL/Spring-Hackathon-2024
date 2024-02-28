@@ -2,30 +2,6 @@
  *  Class definitions
  */
 
-
-class BucketBot {
-  costructor(type) {
-    this.type = type;
-    this.updateSrc();
-  }
-  updateSrc() {
-    switch (this.type) {
-      case "depression":
-        this.src = "/static/BB/depression.jpg"
-      case "anxiety":
-        this.src = "/static/BB/anxiety.jpg"
-      case "yippee":
-        this.src = "/static/BB/yippee.jpg"
-      case "happy":
-        this.src = "/static/BB/happy.jpg"
-    }
-  }
-  setType(type) {
-    this.type = type;
-    this.updateSrc();
-  }
-}
-
 //Buildings
 class Building {
   constructor(code, x, y, size, budget, sustain) {
@@ -105,10 +81,10 @@ class Ball {
     this.building = building; 
     console.log("building updated to " + building); 
   }
-    draw(x, y) { 
+  draw(x, y) {     
     this.x = x;
     this.y = y;
-    if (this.type == 'water') {
+    if (this.type == 'solar') {
       // blue
       fill(0,0,255);
     } else if (this.type == 'electric') {
@@ -136,16 +112,14 @@ class Ball {
   }
 
   ballClicked() {
-    console.log("ball clicked is called")
     let pos = this.body.position;
     let r = this.size / 2;
-      console.log(`${mouseX}, ${mouseY}, ${pos.x}, ${pos.y}`)
-      console.log(`Dist ${dist(mouseX, mouseY, pos.x, pos.y)} and 2r=${r*2}`)
+      // console.log(`${mouseX}, ${mouseY}, ${pos.x}, ${pos.y}`)
+      // console.log(`Dist ${dist(mouseX, mouseY, pos.x, pos.y)} and 2r=${r*2}`)
     if (dist(mouseX, mouseY, pos.x, pos.y) < r) {
-        console.log("ball IS clicked")
+        // console.error("ball IS clicked")
       return true;
     } else {
-        console.log("ball is NOT clicked")
       return false;
     }
   }
@@ -155,7 +129,7 @@ class Ball {
     let r = this.size / 2;
     if (dist(mouseX, mouseY, pos.x, pos.y) < r) {
       // If mouse is over the ball, start dragging
-      console.log("clicked a ball");
+      // console.log("clicked a ball");
       this.dragging = true;
       // Set Matter.js body as non-static so it can move
       Matter.Body.setStatic(this.body, true);
@@ -164,20 +138,26 @@ class Ball {
 
   mouseDragged() {
     if (this.dragging) {
-      console.log("dragged a ball")
+      // console.log("dragged a ball")
       // If the ball is being dragged, update its position
       Matter.Body.setPosition(this.body, { x: mouseX, y: mouseY });
     }
   }
 
   mouseReleased() {
+      console.log("mouse released")
     if (this.dragging) {
       console.log("released a ball")
+      if (TUTORIAL_STEP == 1){
+        console.log('have ball')
+        TUTORIAL_STEP=2
+        easyfix = true
+      }
       // If the ball was being dragged, release it
-      // Set Matter.js body as static again so it stops moving
-      Matter.Body.setStatic(this.body, false);
       // Reset the dragging flag
       this.dragging = false;
+      // Set Matter.js body as static again so it stops moving
+      Matter.Body.setStatic(this.body, false);
     }
   }
   bounce(building){

@@ -1,5 +1,5 @@
 // Jess little guy counter
-let jessLittleGuyCounter = 3;
+let jessLittleGuyCounter = 4;
 
 //Setting Building Details
 const waterCost = 370; // type = 'W'
@@ -12,7 +12,7 @@ let currentTime = 0
 const boxHeight = 200;
 let sayNo;
 
-let DEVMODE = true; // true = test balls, false = normal balls
+let DEVMODE = false; // true = test balls, false = normal balls
 
 //Colour
 let Zomp = '#0DA486';
@@ -20,6 +20,22 @@ let RobinEggBlue = '#33C7BC';
 let YellowGreen = '#8ACC3D';
 let TeaGreen = '#D0E89E';
 let HoneyDew = '#F0FFF3';
+function darkmode() {
+  if (Zomp == '#0DA486'){
+    Zomp = '#274E46';
+    RobinEggBlue = '#3F6563';
+    YellowGreen = '#5B6B40';
+    TeaGreen = '#8F9F5D';
+    HoneyDew = '#81C58D';
+  } else {
+    //now jess will stop having a bit of a panic :,)
+    Zomp = '#0DA486';
+    RobinEggBlue = '#33C7BC';
+    YellowGreen = '#8ACC3D';
+    TeaGreen = '#D0E89E';
+    HoneyDew = '#F0FFF3';
+  }
+}
 
 // Matter.js
 let engine;
@@ -102,7 +118,7 @@ function setup() {
   //⚽✨🏀✨⚾✨🏈 ADD BALLS HERE 🏉✨🏐✨⚾✨🥎
 
   if (DEVMODE) {
-    for (b=0; b<=200; b++) {
+    for (b=0; b<=10; b++) {
       addBall('gas', null, 10 + (Math.random() * 10)); //gas
     }
     for (b=0; b<=10; b++) {
@@ -113,9 +129,10 @@ function setup() {
     }
   } else {
     for (let project of projects) {
-      // let scale = ( (project["cost"] > 8500) ? 1000 : 10000)
-      let size = Math.log2(project["cost"])*2
-      console.log(size)
+        console.log(project)
+      let size = Math.floor(project["cost"]/( (project["cost"] > 8500) ? 1000 : 10000))
+      // let size = Math.log2(project["cost"])*2
+      // console.log(size)
       addBall(project["category"], null, size)
     }
   }
@@ -160,6 +177,7 @@ var el = document.getElementById("pull-chain");
 
 el.addEventListener("click", function() {
   el.classList.toggle("pulled");
+  darkmode()
   if (document.getElementById("dayNight").innerHTML == "Goodnight"){
     document.getElementById("dayNight").innerHTML = "Good Morning";
   } else {
@@ -178,6 +196,7 @@ function draw() {
 
   //------UI Elements------
   //Title Text + Box
+  strokeWeight(0)
   fill('white');
   rect((windowW/2)-200,15,400,90);
   fill(Zomp);
@@ -189,7 +208,8 @@ function draw() {
   textSize(25);
   fill(TeaGreen);
   text('Level 1 - a normal year at BU', 0, 75, windowW);
-
+  strokeWeight(0.5)
+  
   //UI Use Box
   fill(HoneyDew);
   rect(25,133,windowW-75,windowHeight-325);
@@ -202,12 +222,16 @@ function draw() {
   currentTime++
 
   //🏆Win/ 💥Loss
+  if (currentTime >= LEVEL_TIME-(LEVEL_TIME/4)){
+    TUTORIAL_STEP = 15
+  }
     if (currentTime >= LEVEL_TIME) {
       currentTime--
       fill(255,0,0);
       textSize(50);
       text('💥', windowWidth/2, windowHeight/2);
       //Loss Sequence here
+      TUTORIAL_STEP = 6
     } else {
       
     //🏢 Drawing Buildings 🏢
@@ -250,6 +274,7 @@ function draw() {
     }
   // Calculate the proportional height
   drawBB()
+  tutorial()
 }
 
 
@@ -257,45 +282,51 @@ function draw() {
 
 function mouseClicked() {
   //Check if mouse is over a building and react appropriatly ***COUGH COUGH ANDREW*** ahew sorry, what was that?
-  // if (checkBuilding(fusion)) {
-  //   //Fusion
-  //   console.log("Fusion")
-  //   for (var ball of allBalls) {
-  //     ball.mousePressed();
-  //     if (ball.ballClicked()) {
-  //       ball.setBuilding(fusion);
-  //     }
-  //   }
-  // } else if (checkBuilding(pooleGateway)) {
-  //   //Poole Gateway
-  //   console.log("Poole Gateway")
-  //   for (var ball of allBalls) {
-  //     ball.mousePressed();
-  //     if (ball.ballClicked()) {
-  //       ball.setBuilding(pooleGateway);
-  //     }
-  //   }
-  // } else if (checkBuilding(dorsetHouse)) {
-  //   //Dorset House
-  //   console.log("Dorset House")
-  //   for (var ball of allBalls) {
-  //     ball.mousePressed();
-  //     if (ball.ballClicked()) {
-  //       ball.setBuilding(dorsetHouse);
-  //     }
-  //   }
-  // } else if (checkBuilding(kimmeridge)) {
-  //   //Kimmeridge
-  //   console.log("Kimmeridge")
-  //   for (var ball of allBalls) {
-  //     ball.mousePressed();
-  //     if (ball.ballClicked()) {
-  //       ball.setBuilding(kimmeridge);
-  //     }
-  //   }
-  // }
-    console.log("scriptjs mouse clicked")
-  
+  if (checkBuilding(fusion)) {
+    //Fusion
+    console.log("Fusion")
+    for (var ball of allBalls) {
+      // ball.mousePressed();
+      if (ball.ballClicked()) {
+        ball.setBuilding(fusion);
+      }
+    }
+  } else if (checkBuilding(pooleGateway)) {
+    //Poole Gateway
+    console.log("Poole Gateway")
+    for (var ball of allBalls) {
+      // ball.mousePressed();
+      if (ball.ballClicked()) {
+        ball.setBuilding(pooleGateway);
+      }
+    }
+  } else if (checkBuilding(dorsetHouse)) {
+    //Dorset House
+    console.log("Dorset House")
+    for (var ball of allBalls) {
+      // ball.mousePressed();
+      if (ball.ballClicked()) {
+        ball.setBuilding(dorsetHouse);
+      }
+    }
+  } else if (checkBuilding(kimmeridge)) {
+    //Kimmeridge
+    console.log("Kimmeridge")
+    for (var ball of allBalls) {
+      // ball.mousePressed();
+      if (ball.ballClicked()) {
+        ball.setBuilding(kimmeridge);
+      }
+    }
+  }
+  //tutorial 
+  if (TUTORIAL_STEP <=5) {
+  if (TUTORIAL_STEP != 1 && TUTORIAL_STEP != 4){
+    if (!easyfix) {
+    TUTORIAL_STEP++
+    }
+  }
+  }
 }
 
 function mousePressed() {
@@ -307,13 +338,13 @@ function mousePressed() {
 }
 
 function mouseDragged() {
-  for (var ball of fusion.getBalls()) {
+  for (var ball of allBalls) {
     ball.mouseDragged();
   }
 }
 
 function mouseReleased() {
-  for (var ball of fusion.getBalls()) {
+  for (var ball of allBalls) {
     ball.mouseReleased();
   }
 }
@@ -334,7 +365,7 @@ function addBall(type, building, size) {
     if (building.getBudget()["total"] > building.getBalls().length) {
       // enough capacity
       //🛸TYPE, BUILDING, GRAVITY(TRUE???)🛸
-      let ball = new Ball(type, building, size, windowWidth-100, 250);
+      let ball = new Ball(type, building, size, windowWidth/2, 250);
 
       building.addBall(ball);
       allBalls.push(ball);
@@ -342,11 +373,11 @@ function addBall(type, building, size) {
     } else {
       // not enough capacity
       //🛸TYPE, BUILDING, GRAVITY(FALSE??)🛸
-      let ball = new Ball(type, null, size, windowWidth-100, 250);
+      let ball = new Ball(type, null, size, windowWidth/2, 250);
       allBalls.push(ball);
     }
   } else {
-    let ball = new Ball(type, null, size, windowWidth-100, 250);
+    let ball = new Ball(type, null, size, windowWidth/2, 250);
     allBalls.push(ball);
   }
 }
