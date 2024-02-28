@@ -420,9 +420,6 @@ function getData(url) {
     }
 }
 
-
-
-
 //Sustainability Scores
 function checkSustainability() {
     if (default_sustainability == null) { default_sustainability = getData("/sustainability") }

@@ -99,11 +99,61 @@ class Ball {
   update() {
     this.x = this.body.position.x;
     this.y = this.body.position.y;
+
+    /*if (this.building != null && !this.dragging) {
+      if (this.y < this.building.getY() + this.building.getSize()) {
+        console.log("below y")
+        this.y = this.building.getY() + this.building.getSize() - this.size / 2;
+      }
+    }*/
+
+    /*if (!this.dragging) {
+        // Apply gravity
+        Matter.Body.applyForce(this.body, this.body.position, { x: 0, y: 0.001 });
+
+        // Check if the ball is below the desired position
+        if (this.building != null && this.body.position.y > this.building.getY() + this.building.getSize() - this.size / 2) {
+            // Stop the ball's velocity
+            Matter.Body.setVelocity(this.body, { x: 0, y: 0 });
+            // Move the ball to the desired position
+            Matter.Body.setPosition(this.body, { x: this.body.position.x, y: this.building.getY() + this.building.getSize() - this.size / 2 });
+        }
+    }*/
+
+    if (!this.dragging) {
+        // Apply gravity
+        Matter.Body.applyForce(this.body, this.body.position, { x: 0, y: 0.01 });
+
+        // Check if the ball is below the desired position
+        if (this.building != null && this.body.position.y >= this.building.getY() + this.building.getSize() - this.size / 2) {
+            // Stop the ball's vertical movement
+            Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: 0 });
+            // Move the ball to the desired vertical position
+            Matter.Body.setPosition(this.body, { x: this.body.position.x, y: this.building.getY() + this.building.getSize() - this.size / 2 });
+
+          this.body.force.y = 0;
+          //Matter.Body.setStatic(this.body, true);
+        }
+
+      if (this.building != null) {
+        let leftBoundary = this.building.getX() + this.building.getSize() / 2;
+        if (this.body.position.x < leftBoundary) {
+            Matter.Body.setPosition(this.body, { x: leftBoundary - this.size / 2, y: this.body.position.y });
+        }
+        let rightBoundary =leftBoundary + this.building.getSize();
+        if (this.body.position.x > rightBoundary) {
+            Matter.Body.setPosition(this.body, { x: rightBoundary + this.size / 2, y: this.body.position.y });
+        }
+      }
+      
+    }
+    
     //if (this.gravity) {
       /*if (this.y < (windowHeight*0.9) - (this.size / 2) - 5) {
         this.y+=5;
       }*/
-    Matter.Body.setPosition(this.body, { x: this.x, y: this.y });
+    //Matter.Body.setPosition(this.body, { x: this.x, y: this.y });
+    
     this.draw(this.x, this.y);
     /*} else {
       //this.bounce(this.building)
