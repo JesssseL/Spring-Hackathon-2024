@@ -58,15 +58,15 @@ def all_sustainability():
         sustain[building] = data.sustainable(building)
     return sustain
 
-# @app.route("/projects")
-# def all_projects():
-#     # Get all projects - will end up as balls
-#     with open("data/projects.json") as projects_file:
-#         return json.load(projects_file) # Just reads the projects file, and returns it as a json object
-
 @app.route("/projects")
 def all_projects():
-    return data.projects()
+    # Get all projects - will end up as balls
+    with open("data/projects.json") as projects_file:
+        return json.load(projects_file) # Just reads the projects file, and returns it as a json object
+
+# @app.route("/projects")
+# def all_projects():
+#     return data.projects()
 
 
 # CUSTOM 404 PAGE

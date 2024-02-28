@@ -34,8 +34,9 @@ body {
 }
 .center {
   text-align: center;
-  color: var(--Zomp);
+  color: black;/*var(--Zomp);*/
   font-family: "Comic Neue", cursive;
+  transform: translateX(-30px); /* Moves the text 30px to the left */
 }
 
 #levelInfo {

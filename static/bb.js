@@ -74,8 +74,7 @@ function tutorial() {
     checkSolarTut();
   } else if (TUTORIAL_STEP == 5) {
     BBspeak = 'Perfect!! \n You seem to get it!';
-    currentTime = 0;
-    BBimg = 1;
+    BBimg = 2;
   } else if (TUTORIAL_STEP == 15) {
     BBspeak = 'AHHH!! \n HURRY UP!!!';
     BBimg = 0;
@@ -88,6 +87,7 @@ function checkSolarTut() {
   for (var ball of allBalls) {
     if (ball.getType() == 'solar' && ball.getBuilding() != null) {
       TUTORIAL_STEP = 5
+      currentTime = 0;
     }
   }
 }

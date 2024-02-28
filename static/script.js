@@ -151,7 +151,7 @@ function resetTime() {
   if (currentTime > 120) {
     currentTime = 0
     sayNo = 0
-    
+    TUTORIAL_STEP = 6
   } else {
     sayNo = 50
     console.log ('Are you even gonna try?')
