@@ -95,13 +95,13 @@ function setup() {
   //⚽✨🏀✨⚾✨🏈 ADD BALLS HERE 🏉✨🏐✨⚾✨🥎  
     console.log("new ballz")
   for (b=0; b<=500; b++) { 
-    addBall('G', fusion); //gas
+    addBall('G', null); //gas
   }
   for (b=0; b<=10; b++) {
-    addBall('W', fusion); //water
+    addBall('W', null); //water
   }
   for (b=0; b<=10; b++) {
-    addBall('E', fusion); //electric
+    addBall('E', null); //electric
   }
     console.log("ballz added")
 
@@ -213,8 +213,16 @@ function draw() {
       }
     );
     Matter.World.add(world, bounds);
+
+    let thickness = 5;
+      
+      let leftWall = Matter.Bodies.rectangle(-(windowWidth), windowHeight, thickness, windowHeight, { isStatic: true });
+      let rightWall = Matter.Bodies.rectangle(windowWidth, windowHeight, thickness, windowHeight, { isStatic: true });
+
+      Matter.World.add(world, leftWall);
+      Matter.World.add(world, rightWall);
     
-    for (var ball of fusion.getBalls()) {
+    for (var ball of allBalls) {
       ball.update();
     }
 
@@ -300,20 +308,31 @@ function checkBuilding(building) {
 }
 
 function addBall(type, building) {
+  if (building != null) { 
+      alert("building is not null"); 
   //Adds a ball to the building
-  if (building.getBudget()["total"] > building.getBalls().length) {
-    // enough capacity
-    //🛸TYPE, BUILDING, GRAVITY(TRUE???)🛸
-    let ball = new Ball(type, building, 10 + (Math.random() * 10));
+    if (building.getBudget()["total"] > building.getBalls().length) {
+      // enough capacity
+      //🛸TYPE, BUILDING, GRAVITY(TRUE???)🛸
+      let ball = new Ball(type, building, 10 + (Math.random() * 10));
+      ball.setX(100);
+      ball.setY(100);
+      building.addBall(ball);
+      allBalls.push(ball);
+    
+    } else {
+      // not enough capacity
+      //🛸TYPE, BUILDING, GRAVITY(FALSE??)🛸
+      let ball = new Ball(type, null, 10 + (Math.random() * 10));
+      ball.setX(100);
+      ball.setY(100);
+      allBalls.push(ball);
+    }
+  } else {
+    let ball = new Ball(type, null, 10 + (Math.random() * 10));
     ball.setX(100);
     ball.setY(100);
-    building.addBall(ball);
     allBalls.push(ball);
-    
-  } else {
-    // not enough capacity
-    //🛸TYPE, BUILDING, GRAVITY(FALSE??)🛸
-    let ball = new Ball(type, null, 10 + (Math.random() * 10));
   }
 }
 
