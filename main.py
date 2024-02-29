@@ -26,6 +26,12 @@ def index():  # Main Page
 def dan():
     return render_template("dan.html")
 
+# WebGL
+
+@app.route('/webgl')
+def webgl():
+    return render_template("webgl/index.html")
+
 # ^^ MAIN ROUTE WEHRE BALLS AND BOXES ARE ^^
 
 
@@ -54,8 +60,8 @@ def all_budgets():
 def all_sustainability():
     # Get all sustainability data
     sustain = {}
-    for building in ALL_BUILDINGS: # Go through each building and get its sustainability data
-        sustain[building] = data.sustainable(building)
+    for building in ["PG", "F", "K", "D"]: # Go through each building and get its sustainability data
+        sustain[building] = data.sustainable()
     return sustain
 
 @app.route("/projects")
@@ -63,6 +69,10 @@ def all_projects():
     # Get all projects - will end up as balls
     with open("data/projects.json") as projects_file:
         return json.load(projects_file) # Just reads the projects file, and returns it as a json object
+
+# @app.route("/projects")
+# def all_projects():
+#     return data.projects()
 
 
 # CUSTOM 404 PAGE

@@ -60,9 +60,9 @@ class Building {
 
 //Ball
 class Ball {
-  constructor(type, building, size) {
-    this.x = 300;
-    this.y = 100;
+  constructor(type, building, size, x, y) {
+    this.x = x;
+    this.y = y;
     this.type = type;
     this.building = building;
     this.size = size;
@@ -71,20 +71,20 @@ class Ball {
     Matter.World.add(world, this.body);
   }
   //returning private variables
+  getX() { return this.x; }
+  getY() { return this.y; }
   setX(x) { this.x = x; }
   setY(y) { this.y = y; }
   getType() { return this.type; }
   getSize() { return this.size; }
   getBuilding() { return this.building; }
+  hasBuilding() { return this.building != null; }
   //Methods
-  setBuilding(building) { 
-    this.building = building; 
-    console.log("building updated to " + building); 
-  }
-    draw(x, y) { 
+  setBuilding(building) { this.building = building; /*console.log("building updated to " + building);*/ }
+  draw(x, y) {     
     this.x = x;
     this.y = y;
-    if (this.type == 'water') {
+    if (this.type == 'solar') {
       // blue
       fill(0,0,255);
     } else if (this.type == 'electric') {
@@ -99,11 +99,61 @@ class Ball {
   update() {
     this.x = this.body.position.x;
     this.y = this.body.position.y;
+
+    /*if (this.building != null && !this.dragging) {
+      if (this.y < this.building.getY() + this.building.getSize()) {
+        console.log("below y")
+        this.y = this.building.getY() + this.building.getSize() - this.size / 2;
+      }
+    }*/
+
+    /*if (!this.dragging) {
+        // Apply gravity
+        Matter.Body.applyForce(this.body, this.body.position, { x: 0, y: 0.001 });
+
+        // Check if the ball is below the desired position
+        if (this.building != null && this.body.position.y > this.building.getY() + this.building.getSize() - this.size / 2) {
+            // Stop the ball's velocity
+            Matter.Body.setVelocity(this.body, { x: 0, y: 0 });
+            // Move the ball to the desired position
+            Matter.Body.setPosition(this.body, { x: this.body.position.x, y: this.building.getY() + this.building.getSize() - this.size / 2 });
+        }
+    }*/
+
+    if (!this.dragging) {
+        // Apply gravity
+        Matter.Body.applyForce(this.body, this.body.position, { x: 0, y: 0.01 });
+
+        // Check if the ball is below the desired position
+        if (this.building != null && this.body.position.y >= this.building.getY() + this.building.getSize() - this.size / 2) {
+            // Stop the ball's vertical movement
+            Matter.Body.setVelocity(this.body, { x: this.body.velocity.x, y: 0 });
+            // Move the ball to the desired vertical position
+            Matter.Body.setPosition(this.body, { x: this.body.position.x, y: this.building.getY() + this.building.getSize() - this.size / 2 });
+
+          this.body.force.y = 0;
+          //Matter.Body.setStatic(this.body, true);
+        }
+
+      if (this.building != null) {
+        let leftBoundary = this.building.getX() + this.size / 2;
+        if (this.body.position.x < leftBoundary) {
+            Matter.Body.setPosition(this.body, { x: leftBoundary, y: this.body.position.y });
+        }
+        let rightBoundary =leftBoundary + this.building.getSize() - this.size;
+        if (this.body.position.x > rightBoundary) {
+            Matter.Body.setPosition(this.body, { x: rightBoundary, y: this.body.position.y });
+        }
+      }
+      
+    }
+    
     //if (this.gravity) {
       /*if (this.y < (windowHeight*0.9) - (this.size / 2) - 5) {
         this.y+=5;
       }*/
-    Matter.Body.setPosition(this.body, { x: this.x, y: this.y });
+    //Matter.Body.setPosition(this.body, { x: this.x, y: this.y });
+    
     this.draw(this.x, this.y);
     /*} else {
       //this.bounce(this.building)
@@ -112,10 +162,12 @@ class Ball {
   }
 
   ballClicked() {
-    
     let pos = this.body.position;
     let r = this.size / 2;
+      // console.log(`${mouseX}, ${mouseY}, ${pos.x}, ${pos.y}`)
+      // console.log(`Dist ${dist(mouseX, mouseY, pos.x, pos.y)} and 2r=${r*2}`)
     if (dist(mouseX, mouseY, pos.x, pos.y) < r) {
+        // console.error("ball IS clicked")
       return true;
     } else {
       return false;
@@ -127,7 +179,7 @@ class Ball {
     let r = this.size / 2;
     if (dist(mouseX, mouseY, pos.x, pos.y) < r) {
       // If mouse is over the ball, start dragging
-      console.log("clicked a ball");
+      // console.log("clicked a ball");
       this.dragging = true;
       // Set Matter.js body as non-static so it can move
       Matter.Body.setStatic(this.body, true);
@@ -136,20 +188,26 @@ class Ball {
 
   mouseDragged() {
     if (this.dragging) {
-      console.log("dragged a ball")
+      // console.log("dragged a ball")
       // If the ball is being dragged, update its position
       Matter.Body.setPosition(this.body, { x: mouseX, y: mouseY });
     }
   }
 
   mouseReleased() {
+      // console.log("mouse released")
     if (this.dragging) {
-      console.log("released a ball")
+      // console.log("released a ball")
+      if (TUTORIAL_STEP == 1){
+        console.log('have ball')
+        TUTORIAL_STEP=2
+        easyfix = true
+      }
       // If the ball was being dragged, release it
-      // Set Matter.js body as static again so it stops moving
-      Matter.Body.setStatic(this.body, false);
       // Reset the dragging flag
       this.dragging = false;
+      // Set Matter.js body as static again so it stops moving
+      Matter.Body.setStatic(this.body, false);
     }
   }
   bounce(building){

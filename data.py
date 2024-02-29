@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import json
 import random
+from uuid import uuid4
 
 # Get the prices of each utility
 def get_prices():
@@ -42,6 +43,21 @@ def budget(building: str):
 
 
 # Get the sustainability data for a given building
-def sustainable(building: str):
+def sustainable():
     # This is a base sustainability value - used in the game to set starting point of buildings
     return random.randint(0,80) 
+
+def projects():
+    with open("data/projects.json") as f:
+        all_projects = json.load(f)
+    result = []
+    for item in all_projects:
+        for _ in range(1):
+            new = item.copy()
+            new["notes"] = str(uuid4())
+            new["cost"] = new["cost"] + random.randint(1,100)
+            new["name"] = new["name"] + str(uuid4())
+            result.append(new)
+            # result.append(item)
+    return result
+    

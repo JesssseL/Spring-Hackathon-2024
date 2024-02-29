@@ -32,7 +32,8 @@ let final = false;
 let selectedPoint = null;
 
 function setup() {
-  createCanvas(window.innerWidth, window.innerHeight - window.innerHeight / 4);
+  //createCanvas(window.innerWidth, window.innerHeight - window.innerHeight / 4);
+  createCanvas(200, 200)
   textSize(20);
   angleMode(DEGREES);
   //slider = createSlider(1, 3, 1.5, 0.5);
@@ -49,7 +50,7 @@ function setup() {
 }
 
 function draw() {
-  background("#02bef2");
+  background("#33C7BC");
   fill(255);
   if (!run) {
     if (mode == 1) {

@@ -1,14 +1,33 @@
+// Jess little guy counter
+let jessLittleGuyCounter = 5;
+
 //Setting Building Details
 const waterCost = 370; // type = 'W'
 const electricCost = 45; // type = 'E'
 const gasCost = 10.7; // type = 'G'
 let windowW = window.innerWidth;
+let windowH = (window.innerHeight)*0.9
 const LEVEL_TIME = 2000;
 let currentTime = 0
 const boxHeight = 200;
 let sayNo;
+let graphCoOrds = [0, 0, 0, 0];
+let levelInfo = 'Level 1 - a normal year at BU';
+// Constants
+const FUSION_SIZE = 15;
+const POOLE_SIZE = 10;
+const DORSET_SIZE = 5;
+const KIMME_SIZE = 10;
+graphCoOrds[10] = FUSION_SIZE
+graphCoOrds[11] = POOLE_SIZE
+graphCoOrds[12] = DORSET_SIZE
+graphCoOrds[13] = KIMME_SIZE
+graphCoOrds[20] = 'F'
+graphCoOrds[21] = 'PG'
+graphCoOrds[22] = 'D'
+graphCoOrds[23] = 'K'
 
-let DEVMODE = true;
+let DEVMODE = false; // true = test balls, false = normal balls
 
 //Colour
 let Zomp = '#0DA486';
@@ -16,6 +35,22 @@ let RobinEggBlue = '#33C7BC';
 let YellowGreen = '#8ACC3D';
 let TeaGreen = '#D0E89E';
 let HoneyDew = '#F0FFF3';
+function darkmode() {
+  if (Zomp == '#0DA486'){
+    Zomp = '#274E46';
+    RobinEggBlue = '#3F6563';
+    YellowGreen = '#5B6B40';
+    TeaGreen = '#8F9F5D';
+    HoneyDew = '#81C58D';
+  } else {
+    //now jess will stop having a bit of a panic :,)
+    Zomp = '#0DA486';
+    RobinEggBlue = '#33C7BC';
+    YellowGreen = '#8ACC3D';
+    TeaGreen = '#D0E89E';
+    HoneyDew = '#F0FFF3';
+  }
+}
 
 // Matter.js
 let engine;
@@ -38,7 +73,7 @@ const GAP = 20;
 const MAX = ((windowW/100));
 function setup() {
   //p5.js
-  createCanvas(windowWidth-25, windowHeight*0.8);
+  createCanvas(windowWidth-25, windowHeight*0.9);
   
   //Matter.js
   engine = Matter.Engine.create(); // HELLO ANDREW!!!
@@ -68,29 +103,29 @@ function setup() {
 
   // Get Budget & Sustainability Data
     let budgetData = checkBudgets();
-    let sustainabilityData = checkSustainability();
+
+    let sustainabilityData = getData("/sustainability")
     let projects = getProjects();
     
   //Buildings
-  // Constants
-  const FUSION_SIZE = 10;
-  const POOLE_SIZE = 15;
-  const DORSET_SIZE = 10;
-  const KIMME_SIZE = 10;
   const GAP = (windowW-100)/ ((FUSION_SIZE+POOLE_SIZE+DORSET_SIZE+KIMME_SIZE) * 1.15); // 4 buildings, 5 gaps
   let currentX = GAP + 50; // Start with a gap
 
   // Buildings - Adjusted for simplicity
   fusion = new Building('F', currentX, boxHeight, GAP*FUSION_SIZE, budgetData["fusion"], sustainabilityData["fusion"]);
+  graphCoOrds[0] = currentX
   currentX += fusion.getSize() + GAP;
-
+  
   pooleGateway = new Building('PG', currentX, boxHeight, GAP*POOLE_SIZE, budgetData["pgb"], sustainabilityData["pgb"]);
+  graphCoOrds[1] = currentX
   currentX += pooleGateway.getSize() + GAP;
 
   dorsetHouse = new Building('D', currentX, boxHeight, GAP*DORSET_SIZE, budgetData["dorset_house"], sustainabilityData["dorset_house"]);
+  graphCoOrds[2] = currentX
   currentX += dorsetHouse.getSize() + GAP;
 
   kimmeridge = new Building('K', currentX, boxHeight, GAP*KIMME_SIZE, budgetData["kimmeridge"], sustainabilityData["kimmeridge"]);
+  graphCoOrds[3] = currentX
 
   // There you go, babe!
   // Sweet and simple, love.
@@ -98,7 +133,7 @@ function setup() {
   //⚽✨🏀✨⚾✨🏈 ADD BALLS HERE 🏉✨🏐✨⚾✨🥎
 
   if (DEVMODE) {
-    for (b=0; b<=500; b++) {
+    for (b=0; b<=10; b++) {
       addBall('gas', null, 10 + (Math.random() * 10)); //gas
     }
     for (b=0; b<=10; b++) {
@@ -109,9 +144,10 @@ function setup() {
     }
   } else {
     for (let project of projects) {
-      // let scale = ( (project["cost"] > 8500) ? 1000 : 10000)
-      let size = Math.log2(project["cost"])*2
-      console.log(size)
+        // console.log(project)
+      let size = Math.floor(project["cost"]/( (project["cost"] > 8500) ? 1000 : 10000))
+      // let size = Math.log2(project["cost"])*2
+      // console.log(size)
       addBall(project["category"], null, size)
     }
   }
@@ -130,7 +166,7 @@ function resetTime() {
   if (currentTime > 120) {
     currentTime = 0
     sayNo = 0
-    
+    TUTORIAL_STEP = 6
   } else {
     sayNo = 50
     console.log ('Are you even gonna try?')
@@ -147,7 +183,7 @@ function buttonReact() {
     let newColor = color(Zomp); //staring Color
     newColor.setAlpha(sayNo); 
     fill(newColor)
-    text("NO", 0, 25, windowW);
+    text("NO", 0, (windowH/2)-100, windowW);
     sayNo--
   }
 }
@@ -156,6 +192,7 @@ var el = document.getElementById("pull-chain");
 
 el.addEventListener("click", function() {
   el.classList.toggle("pulled");
+  darkmode()
   if (document.getElementById("dayNight").innerHTML == "Goodnight"){
     document.getElementById("dayNight").innerHTML = "Good Morning";
   } else {
@@ -170,10 +207,9 @@ function draw() {
 
   //translate(windowWidth/2, windowHeight/2);
 
-  buttonReact()
-
   //------UI Elements------
   //Title Text + Box
+  strokeWeight(0)
   fill('white');
   rect((windowW/2)-200,15,400,90);
   fill(Zomp);
@@ -184,8 +220,9 @@ function draw() {
   text('Buckets and Balls', 0, 20, windowW);
   textSize(25);
   fill(TeaGreen);
-  text('Level 1 - a normal year at BU', 0, 75, windowW);
-
+  text(levelInfo, 0, 75, windowW);
+  strokeWeight(0.5)
+  
   //UI Use Box
   fill(HoneyDew);
   rect(25,133,windowW-75,windowHeight-325);
@@ -198,12 +235,33 @@ function draw() {
   currentTime++
 
   //🏆Win/ 💥Loss
+  if (currentTime >= LEVEL_TIME-(LEVEL_TIME/4)){
+    TUTORIAL_STEP = 15
+  }
     if (currentTime >= LEVEL_TIME) {
       currentTime--
       fill(255,0,0);
       textSize(50);
-      text('💥', windowWidth/2, windowHeight/2);
-      //Loss Sequence here
+      //Calculate sustainability
+      //💐🌸💮🪷🏵️🌹🥀🌺🌻🌼🌱🪴🌲🌳
+      let sus = 0;
+      for (b=0; b<=3; b++){
+        //graphCoOrds
+          curr_sus_level = checkSustainability(graphCoOrds[b+20]);
+          sus += curr_sus_level;
+      }
+      sus = sus/4
+      //☘️🍀🍁🍂🍃🍄🪨🪵🌴🌵🌾🌿🌷🪻
+      //Win/Loss Sequences
+      if (sus >= 60) {
+        //Win Sequence here
+        text('🎉', windowWidth/2, windowHeight/2);
+      } else {
+        //Loss Sequence here
+        text('💥', windowWidth/2, windowHeight/2);
+      }
+      
+      TUTORIAL_STEP = 6
     } else {
       
     //🏢 Drawing Buildings 🏢
@@ -212,6 +270,16 @@ function draw() {
     pooleGateway.update();
     dorsetHouse.update();
     kimmeridge.update();
+
+    //📊 Drawing Graphs 📊
+    for (b=0; b<=3; b++){
+      //graphCoOrds
+      fill(TeaGreen);
+      rect(graphCoOrds[b] + GAP, boxHeight + GAP, GAP, (GAP*graphCoOrds[b+10])-(GAP*3));
+      fill('white');
+      rect(graphCoOrds[b] + GAP, boxHeight + GAP, GAP, ((GAP*graphCoOrds[b+10])-(GAP*3))*(1-(checkSustainability(graphCoOrds[b+20])/100)));
+    }
+    buttonReact()
 
     let bounds = Matter.Bodies.rectangle(
       windowWidth / 2,
@@ -230,20 +298,37 @@ function draw() {
 
     let thickness = 5;
       
-      let leftWall = Matter.Bodies.rectangle(-(windowWidth), windowHeight, thickness, windowHeight, { isStatic: true });
-      let rightWall = Matter.Bodies.rectangle(windowWidth, windowHeight, thickness, windowHeight, { isStatic: true });
+      let leftWall = Matter.Bodies.rectangle(20, 0, 10, windowHeight * 2, { isStatic: true });
+      let rightWall = Matter.Bodies.rectangle(windowWidth - 42, 0, 10, windowHeight * 2, { isStatic: true });
 
       Matter.World.add(world, leftWall);
       Matter.World.add(world, rightWall);
     
     for (var ball of allBalls) {
       ball.update();
+      //if (ball.hasBuilding()) {
+      if (checkBuildingAgainstBall(fusion, ball)) {
+        ball.setBuilding(fusion);
+      }
+      if (checkBuildingAgainstBall(pooleGateway, ball)) {
+        ball.setBuilding(pooleGateway);
+      }
+      if (checkBuildingAgainstBall(dorsetHouse, ball)) {
+        ball.setBuilding(dorsetHouse);
+      }
+      if (checkBuildingAgainstBall(kimmeridge, ball)) {
+        ball.setBuilding(kimmeridge);
+      }
+      //}
     }
 
 
     // ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-20, windowWidth, 20, {isStatic: true})
     // Matter.World.add(world, ground);
     }
+  // Calculate the proportional height
+  drawBB()
+  tutorial()
 }
 
 
@@ -255,7 +340,7 @@ function mouseClicked() {
     //Fusion
     console.log("Fusion")
     for (var ball of allBalls) {
-      ball.mousePressed();
+      // ball.mousePressed();
       if (ball.ballClicked()) {
         ball.setBuilding(fusion);
       }
@@ -264,7 +349,7 @@ function mouseClicked() {
     //Poole Gateway
     console.log("Poole Gateway")
     for (var ball of allBalls) {
-      ball.mousePressed();
+      // ball.mousePressed();
       if (ball.ballClicked()) {
         ball.setBuilding(pooleGateway);
       }
@@ -273,7 +358,7 @@ function mouseClicked() {
     //Dorset House
     console.log("Dorset House")
     for (var ball of allBalls) {
-      ball.mousePressed();
+      // ball.mousePressed();
       if (ball.ballClicked()) {
         ball.setBuilding(dorsetHouse);
       }
@@ -282,32 +367,38 @@ function mouseClicked() {
     //Kimmeridge
     console.log("Kimmeridge")
     for (var ball of allBalls) {
-      ball.mousePressed();
+      // ball.mousePressed();
       if (ball.ballClicked()) {
         ball.setBuilding(kimmeridge);
       }
     }
-  } else {
-    for (var ball of allBalls) {
-      if (ball.ballClicked()) {
-        ball.mousePressed();
-        ball.setBuilding(null);
-      }
+  }
+  //tutorial 
+  if (TUTORIAL_STEP <=5) {
+  if (TUTORIAL_STEP != 1 && TUTORIAL_STEP != 4){
+    if (!easyfix) {
+    TUTORIAL_STEP++
     }
   }
-  
+  }
+}
+
+function mousePressed() {
+  for (var ball of allBalls) {
+    if (ball.ballClicked()) {
+      ball.mousePressed();
+    }
+  }
 }
 
 function mouseDragged() {
-  for (var ball of fusion.getBalls()) {
+  for (var ball of allBalls) {
     ball.mouseDragged();
   }
 }
 
 function mouseReleased() {
-  event.preventDefault();
-  //console.log("release called")
-  for (var ball of fusion.getBalls()) {
+  for (var ball of allBalls) {
     ball.mouseReleased();
   }
 }
@@ -321,31 +412,39 @@ function checkBuilding(building) {
   }
 }
 
+function checkBuildingAgainstBall(building, ball) {
+  //Checks if mouse is over a building
+  if (ball.getX() > building.getX() && ball.getX() < building.getX() + building.getSize() && ball.getY() > building.getY() && ball.getY() < building.getY() + building.getSize()) {
+    return true
+  } else {
+    return false
+  }
+}
+
 function addBall(type, building, size) {
+
+  let lowerWidth = pooleGateway.getX() + 100;
+  let upperWidth = dorsetHouse.getX() + dorsetHouse.getSize() - 100;
+  
   if (building != null) { 
       alert("building is not null"); 
   //Adds a ball to the building
     if (building.getBudget()["total"] > building.getBalls().length) {
       // enough capacity
       //🛸TYPE, BUILDING, GRAVITY(TRUE???)🛸
-      let ball = new Ball(type, building, size);
-      ball.setX(100);
-      ball.setY(100);
+      let ball = new Ball(type, building, size, Math.random()*(upperWidth-lowerWidth)+lowerWidth, windowHeight * 0.7);
+
       building.addBall(ball);
       allBalls.push(ball);
     
     } else {
       // not enough capacity
       //🛸TYPE, BUILDING, GRAVITY(FALSE??)🛸
-      let ball = new Ball(type, null, size);
-      ball.setX(100);
-      ball.setY(100);
+      let ball = new Ball(type, null, size, Math.random()*(upperWidth-lowerWidth)+lowerWidth, windowHeight * 0.7);
       allBalls.push(ball);
     }
   } else {
-    let ball = new Ball(type, null, size);
-    ball.setX(100);
-    ball.setY(100);
+    let ball = new Ball(type, null, size, Math.random()*(upperWidth-lowerWidth)+lowerWidth, windowHeight * 0.7);
     allBalls.push(ball);
   }
 }
@@ -363,13 +462,30 @@ function getData(url) {
 
     } else {
         // If anything but successful
-        alert(`An error occured while trying to look at: ${url}. Pls tell james he done a silly`)
+        alert(`An error occured while trying to look at: ${url}. Please reload the page. If it still broke then tell james he did a silly`)
     }
 }
 
+let default_sustainability;
+let sus_level = {"F": 0, "PG": 0, "D": 0, "K": 0};
+
+
 //Sustainability Scores
-function checkSustainability() {
-    return getData('/sustainability')
+function checkSustainability(roomCode) {
+    // console.log(roomCode)
+    if (default_sustainability == null) { default_sustainability = getData("/sustainability") }
+    sus_level = {"F": default_sustainability["F"], "PG": default_sustainability["PG"], "D": default_sustainability["D"], "K": default_sustainability["K"]};
+    // console.log(default_vals)
+    for (let current_ball of allBalls) {
+        let current_building = current_ball.getBuilding()
+        // console.log(current_building)
+        if (current_building != null) {
+            // console.log(default_sustainability[current_building.code])
+            sus_level[current_building.code] += 10
+        } 
+    }
+    // return getData('/sustainability')
+    return sus_level[roomCode];
 }
 
 function checkBudgets() {
@@ -378,4 +494,16 @@ function checkBudgets() {
 
 function getProjects() {
     return getData('/projects')
+}
+
+function FREEZE() {
+    for (let current_ball of allBalls) {
+        Matter.body.setStatic(current_ball.body, true)
+    }
+}
+
+function seeBallsHomes() {
+    for (let current_ball of allBalls) {
+        console.log(current_ball.getBuilding())
+    }
 }

@@ -1,87 +1,102 @@
 [
   {
-      "id": "7fd30020-cabe-4f46-95fc-887dd1d0ca6a",
     "name": "LED Bulb Replacement",
     "cost": 5000,
     "notes": "Flourescent lamps are replaced with LED bulbs, saves 4% of building electricity consumption per year",
-      "category": "electric"
+      "category": "electric",
+      "count": 4
   },
+    {
+        "name": "LED Bulb Replacement",
+        "cost": 50000,
+        "notes": "New Bulbs innit",
+          "category": "electric",
+          "count": 3
+      },
   {
-      "id": "f9912a05-cd04-43ee-a8a0-9aacb63c7eda",
     "name": "LED fixture Replacement",
     "cost": 85000,
     "notes": "64kW flourescent lights are replaced with 25W LED lighting fixtures. Saves 7% of building electricity consumption per year",
-        "category": "electric"
+        "category": "electric",
+        "count": 4
   },
   {
-      "id": "f2ead39a-1a45-4a50-b7a4-15016421448b",
     "name": "Lighting Controls",
     "cost": 8000,
     "notes": "Includes vacancy sensors, daylight dimming sensors and timeclocks. Saves 2% of building electricity consumption per year",
-        "category": "electric"
+        "category": "electric",
+        "count": 4
   },
   {
-      "id": "e6f27aba-f9dc-4075-a3b9-d66cef1aaba0",
     "name": "Pump Upgrades",
     "cost": 40000,
     "notes": "Upgrade all pumps (all heating systems and hot water circulation) which makes them more efficient. Saves 5% of building electricity usage per year",
-        "category": "electric"
+        "category": "electric",
+        "count": 4
   },
   {
-      "id": "2105ef42-5e35-4fdd-b763-1d81fd0c53c1",
     "name": "IT Server Upgrades",
     "cost": 15000,
     "notes": "Upgrades existing IT server equipment with newer high efficiency equipment. Saves around 6% of electricity consumption per building",
-        "category": "electric"
+        "category": "electric",
+        "count": 4
   },
   {
-      "id": "fc750c94-7ebb-4875-81b8-e059578f08d8",
     "name": "Boiler Upgrades",
     "cost": 15000,
     "notes": "End-of-life boilers are replaced with higher efficiency models, which saves 5% of building gas usage per year",
-        "category": "gas"
+        "category": "gas",
+        "count": 4
   },
   {
-      "id": "e33d91e5-cd88-42c7-8850-ecd2ab2fb003",
     "name": "Insulation Upgrades (walls)",
     "cost": 40000,
     "notes": "Adds extra insulation to the walls of the building. Saves 6% of building gas usage per year",
-        "category": "gas"
+        "category": "gas",
+        "count": 4
   },
   {
-      "id": "435fc0c9-bcf2-4af9-ad91-31c687c987fa",
     "name": "Insulation Upgrades (roof)",
     "cost": 75000,
     "notes": "Adds extra insulation to the roof of a building. Saves 8% of the buildings gas usage per year",
-        "category": "gas"
+        "category": "gas",
+        "count": 2
   },
   {
-      "id": "328f8019-afa1-452e-ab5c-ce7e626342e4",
     "name": "Insulation Upgrades (pipework and ductwork)",
     "cost": 2000,
     "notes": "Adds insulation to all heated pipes and ducts. Saves 1% of buildng gas usage per year",
-        "category": "gas"
+        "category": "gas",
+        "count": 4
   },
   {
-      "id": "f3f4a6d9-4c0e-4d01-ad22-d88d099d2e31",
     "name": "Air Source Heat Pump Retrofit",
     "cost": 175000,
     "notes": "For Dorset House only: Retrofitting an ASHP will eliminate gas usage completely in Dorset House, but increase the electricity consumption by 15%. If any other gas-saving projects are applied to Dorset House, apply the savings as electricity savings instead. If you retrofit an air source heat pump, the boilers will be removed, so you cannot also do boiler upgrades.",
     "allowed_buildings": ["dorset_house"],
-        "category": "gas"
+        "category": "gas",
+        "count": 1
   },
   {
-      "id": "4ab4f5b1-ee1b-4e45-b3f7-c87df75117d9",
     "name": "Heating, ventilation and cooling Controls Upgrades",
     "cost": 35000,
     "notes": "Enables energy-using equipment to be smarter, eg. heating and ventilation only comes on when someone walks into a room, saves 5% gas, 2% electricity per year",
-        "category": "gas"
+        "category": "gas",
+        "count": 4
   },
   {
-      "id": "44043fd7-479a-423d-9cf1-cf4ea492e000",
     "name": "Glazing upgrades (windows and doors)",
     "cost": 250000,
     "notes": "Upgrades all windows and doors to triple glazing. Saves 7% of the building's total gas usage per year",
-        "category": "gas"
-  }
+        "category": "gas",
+        "count": 1
+  },
+    {
+        "name": "Solar Panel",
+        "cost": 85000,
+        "notes": "Hello",
+            "category": "solar",
+            "count": 1
+      }
+    
 ]
