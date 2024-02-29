@@ -80,10 +80,7 @@ class Ball {
   getBuilding() { return this.building; }
   hasBuilding() { return this.building != null; }
   //Methods
-  setBuilding(building) { 
-    this.building = building; 
-    console.log("building updated to " + building); 
-  }
+  setBuilding(building) { this.building = building; /*console.log("building updated to " + building);*/ }
   draw(x, y) {     
     this.x = x;
     this.y = y;
