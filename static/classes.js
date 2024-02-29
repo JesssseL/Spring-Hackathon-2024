@@ -46,7 +46,25 @@ class Building {
   getBudget() { return this.budget; }
   getSize() { return this.size; }
   //Methods
-  draw() { return square(this.x, this.y, this.size); }
+  // draw() { return square(this.x, this.y, this.size); }
+  draw() { 
+      let model;
+      switch (this.code) {
+          case "F":
+              model = fusion3D
+              break;
+          case "PG":
+            model = pgb3D
+            break;
+          case "D":
+            model = dorsetHouse3D
+            break;
+          case "K":
+            model = kimmeridge3D
+            break;
+      }
+      return image(model, this.x, this.y, this.size, this.size)
+  }
   getBalls() { return this.balls; }
   addBall(ball) { this.balls.push(ball) }
   removeBall(ball) { this.balls.splice(this.balls.indexOf(ball), 1); }
@@ -60,12 +78,13 @@ class Building {
 
 //Ball
 class Ball {
-  constructor(type, building, size, x, y) {
+  constructor(type, building, size, sus_value, x, y) {
     this.x = x;
     this.y = y;
     this.default_x = x;
     this.default_y = y;
     this.type = type;
+    this.sus_value = sus_value;
     this.building = building;
     this.size = size;
     this.dragging = false;
@@ -81,10 +100,18 @@ class Ball {
   setY(y) { this.y = y; }
   getType() { return this.type; }
   getSize() { return this.size; }
+  getSusValue() { return this.sus_value; }
   getBuilding() { return this.building; }
   hasBuilding() { return this.building != null; }
   //Methods
   setBuilding(building) { this.building = building; /*console.log("building updated to " + building);*/ }
+  resetPosition() {
+      this.building = null;
+      this.x = this.default_x;
+      this.body.position.x = this.default_x;
+      this.y = this.default_y;
+      this.body.position.y = this.default_y;
+  }
   draw(x, y) {     
     this.x = x;
     this.y = y;
@@ -237,4 +264,144 @@ class Ball {
       this.gravity = true
     }
   }
+}
+
+//---- Dan Switch Classes ----
+class Stick{
+  constructor(a,b){
+    this.pointA = a;
+    this.pointB = b;
+    this.length = dist(this.pointA.pos.x,this.pointA.pos.y,this.pointB.pos.x,this.pointB.pos.y);
+    this.off = 0;
+  }
+  //function setLineDash(list) {
+  //  drawingContext.setLineDash(list);
+  //}
+  render(){
+    push();
+    stroke(0);
+    strokeWeight(4);
+   // setLineDash([5, 5]);
+
+    line(this.pointA.pos.x,this.pointA.pos.y,this.pointB.pos.x+this.off,this.pointB.pos.y+this.off);
+    pop();
+  }
+}
+
+class Point{
+  constructor(x,y,locked=false){
+    this.pos = createVector(x,y);
+    this.prevPos = createVector(x,y);
+    this.locked = locked;
+  }
+
+  render(){
+    push()
+    noStroke();
+    fill(130);
+    if(this.locked) fill("#ff5f5c");
+    circle(this.pos.x,this.pos.y,15)
+    pop()
+  }
+}
+
+//Sorry Andrew <3
+function Simulate() {
+  for (var s of sticks) {
+    if (run) {
+      for (var i = 0; i < 100; i++) {
+        var direction = p5.Vector.sub(s.pointB.pos, s.pointA.pos);
+        direction = direction.normalize();
+        var delta_D = getDistance(s.pointA.pos, s.pointB.pos) - s.length;
+        var dM = direction.mult(delta_D);
+        dM = dM.div(2);
+        if (!s.pointA.locked) {
+          s.pointA.pos.add(dM);
+        }
+        if (!s.pointB.locked) {
+          s.pointB.pos.sub(dM);
+        }
+      }
+    }
+  }
+
+  for (var p of points) {
+    if (!p.locked && run) {
+      let posBefore = p.pos.copy();
+      if (p.pos.y < height - 20) {
+        //apply gravity
+        p.pos.add(p5.Vector.sub(p.pos, p.prevPos));
+        p.pos.add(gravity.mult(1).mult(pow(1, deltaTime)));
+      } else if (p.pos.y > height - 1) {
+        //apply reverse gravity
+        p.pos.sub(p5.Vector.sub(p.pos, p.prevPos).mult(1));
+        p.pos.sub(gravity.mult(1).mult(pow(1, deltaTime)));
+        continue;
+      }
+      //add wind vector
+      p.pos.add(wind.mult(1).mult(pow(1, deltaTime)));
+      if (p.pos.x > width) {
+        //apply bounding edge 1
+        p.pos.sub(p5.Vector.sub(p.pos, p.prevPos).mult(1));
+        p.pos.add(bound.mult(1).mult(pow(1, deltaTime)));
+        continue;
+      } else if (p.pos.x < 0) {
+        p.pos.sub(p5.Vector.sub(p.pos, p.prevPos).mult(1));
+        p.pos.add(bound.mult(1).mult(pow(1, deltaTime)));
+        continue;
+      }
+      p.prevPos = posBefore;
+    }
+  }
+  if (renderSwitch == 1 || !run) {
+    for (var s of sticks) {
+      s.render();
+    }
+    for (var p of points) {
+      p.render();
+    }
+  }
+  if (run && renderSwitch == 2) {
+    push();
+    noFill();
+    var val = points.length % 4 == 0 && !final ? QUADS : LINES;
+    var val2 = final ? 40 : 20;
+    strokeWeight(val2);
+    stroke(255);
+    beginShape(val);
+    for (let i = 0; i < points.length; i++) {
+      stroke(points[i].pos.x, points[i].pos.y, i * 10);
+      vertex(points[i].pos.x, points[i].pos.y);
+    }
+    endShape();
+    pop();
+  } else if (run && renderSwitch == 3) {
+    push();
+    noFill();
+    stroke(255);
+    beginShape();
+    for (let i = 0; i < points.length; i++) {
+      vertex(points[i].pos.x, points[i].pos.y);
+    }
+    endShape();
+    pop();
+  }
+}
+//More Swtich Stuff
+
+function checkArea(x, y) {
+  //dont make fun
+  var i = 0;
+  for (var p of points) {
+    if (dist(p.pos.x, p.pos.y, x, y) <= 20) {
+      return [false, i];
+    }
+    i++;
+  }
+  return [true];
+}
+
+//for two points
+function getDistance(a, b) {
+  return dist(a.x, a.y, b.x, b.y);
 }

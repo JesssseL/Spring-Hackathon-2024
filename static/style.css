@@ -81,7 +81,7 @@ button:hover {
   transform: scale(1.05) rotate(-5deg);
 }
 
-#pull-chain{	
+/* #pull-chain{	
   display: inline;
   position: absolute;
   right: 70px;
@@ -106,7 +106,7 @@ button:hover {
 }
 #pull-chain.pulled .chain {
     height: 350px;
-}
+} */
 
 /* ----------- 
      Links

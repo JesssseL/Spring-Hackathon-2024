@@ -8,7 +8,7 @@ class Point{
   render(){
     push()
     noStroke();
-    fill(255);
+    fill(130);
     if(this.locked) fill("#ff5f5c");
     circle(this.pos.x,this.pos.y,15)
     pop()

@@ -45,7 +45,7 @@ function Simulate() {
       p.prevPos = posBefore;
     }
   }
-  if (render == 1 || !run) {
+  if (renderSwitch == 1 || !run) {
     for (var s of sticks) {
       s.render();
     }
@@ -53,7 +53,7 @@ function Simulate() {
       p.render();
     }
   }
-  if (run && render == 2) {
+  if (run && renderSwitch == 2) {
     push();
     noFill();
     var val = points.length % 4 == 0 && !final ? QUADS : LINES;
@@ -67,7 +67,7 @@ function Simulate() {
     }
     endShape();
     pop();
-  } else if (run && render == 3) {
+  } else if (run && renderSwitch == 3) {
     push();
     noFill();
     stroke(255);

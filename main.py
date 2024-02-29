@@ -26,6 +26,10 @@ def index():  # Main Page
 def dan():
     return render_template("dan.html")
 
+@app.route("/james")
+def james():
+    return render_template("james.html")
+
 # WebGL
 
 @app.route('/webgl')

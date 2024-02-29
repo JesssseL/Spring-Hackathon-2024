@@ -14,6 +14,18 @@ const boxHeight = 200;
 let sayNo;
 let graphCoOrds = [0, 0, 0, 0];
 let levelInfo = 'Level 1 - a normal year at BU';
+//For Light Switch
+let points = [];
+let sticks = [];
+let run = true;
+let mode = 0;
+let renderSwitch = 1;
+let gravity, wind, bound;
+let selection = [false, null, null];
+let slider;
+let final = false;
+let selectedPoint = null;
+let dark = false;
 // Constants
 const FUSION_SIZE = 15;
 const POOLE_SIZE = 10;
@@ -36,8 +48,8 @@ let RobinEggBlue = '#33C7BC';
 let YellowGreen = '#8ACC3D';
 let TeaGreen = '#D0E89E';
 let HoneyDew = '#F0FFF3';
-function darkmode() {
-  if (Zomp == '#0DA486'){
+function darkmode(dark) {
+  if (dark){
     Zomp = '#274E46';
     RobinEggBlue = '#3F6563';
     YellowGreen = '#5B6B40';
@@ -72,10 +84,20 @@ let allBalls = [];
 const START = 75;
 const GAP = 20;
 const MAX = ((windowW/100));
-let button;  
+let button;
+
+// function preload() {
+//     // gateway3D = loadModel("/static/3D/gateway.obj")
+//     fusion3D = loadImage("/static/3D/fusion.png")
+// }
+
 function setup() {
   //p5.js
   createCanvas(windowWidth-25, windowHeight*0.9);
+    fusion3D = loadImage("/static/3D/fusion.png")
+    pgb3D = loadImage("/static/3D/pgb.png")
+    kimmeridge3D = loadImage("/static/3D/kimmeridge.png")
+    dorsetHouse3D = loadImage("/static/3D/dorset_house.png")
   
   //Matter.js
   engine = Matter.Engine.create(); // HELLO ANDREW!!!
@@ -86,6 +108,8 @@ function setup() {
       options: {
           width: 1, // Set to 1 & 1 to remove the secondary canvas from the screen
           height: 1, // ^ doing so changes 0 physics calcs... idk why it did that
+          // width: windowWidth,
+          // height: windowHeight*0.9,
           wireframes: false, // Set to true for wireframe rendering if needed
           showAxes: true, // Show axes
           showAngleIndicator: true, // Show angle indicator
@@ -149,7 +173,7 @@ function setup() {
         // console.log(project)
         // let size = (project["cost"]/100000)*windowWidth;
       let size = Math.floor(project["cost"]/( (project["cost"] > 8500) ? 1000 : 10000)) // 1000, 10000
-      console.log(size);
+      // console.log(size);
       if (size < 30) {
         size = 40;
       } else if (size > 100) {
@@ -157,7 +181,7 @@ function setup() {
       }
       // let size = Math.log2(project["cost"])*2
       // console.log(size)
-      addBall(project["category"], null, size)
+      addBall(project["category"], null, size, project["value"])
     }
   }
 
@@ -171,6 +195,12 @@ function setup() {
   button = createButton('Try Again?');
   button.position(75, 45);
   button.mousePressed(resetTime);
+
+  //Light Switch
+  gravity = createVector(0, 1);
+  wind = createVector(0, 0);
+  bound = createVector(1, 0);
+  makePuller() 
 }
 function resetLevel() {
   levelInfo = '🛰️Level 2🚀 - 🛸IN THE FUTURE🛸';
@@ -186,14 +216,7 @@ function resetLevel() {
 function resetTime() {
   // balls
   for (let ball of allBalls) { // balls
-      ball.setBuilding(null)
-      let newX = ball.getDefaultX();
-    ball.body.position.x = newX
-      // ball.setX(newX)
-      let newY = ball.getDefaultY();
-    ball.body.position.y = newY
-      // ball.setY(newY)
-      console.log(`X: ${newX} Y: ${newY}`)
+      ball.resetPosition()
       
   }
   
@@ -225,17 +248,17 @@ function buttonReact() {
   }
 }
 
-var el = document.getElementById("pull-chain");
+// var el = document.getElementById("pull-chain");
 
-el.addEventListener("click", function() {
-  el.classList.toggle("pulled");
-  darkmode()
-  if (document.getElementById("dayNight").innerHTML == "Goodnight"){
-    document.getElementById("dayNight").innerHTML = "Good Morning";
-  } else {
-    document.getElementById("dayNight").innerHTML = "Goodnight";
-  }
-}, false);
+// el.addEventListener("click", function() {
+//   el.classList.toggle("pulled");
+//   darkmode()
+//   if (document.getElementById("dayNight").innerHTML == "Goodnight"){
+//     document.getElementById("dayNight").innerHTML = "Good Morning";
+//   } else {
+//     document.getElementById("dayNight").innerHTML = "Goodnight";
+//   }
+// }, false);
 
 function draw() {
   //Change Speed Here
@@ -271,7 +294,7 @@ function draw() {
   fill(YellowGreen);
   rect(50,120,(((windowW-125)/LEVEL_TIME)*currentTime),25, 25);
   currentTime++
-
+  
   //🏆Win/ 💥Loss
   if (currentTime >= LEVEL_TIME-(LEVEL_TIME/4)){
     TUTORIAL_STEP = 15
@@ -344,6 +367,7 @@ function draw() {
       }
       stroke(1)
     }
+        // model(gateway3D)
       
       //Lord Knows whats going on here
     let bounds = Matter.Bodies.rectangle(
@@ -394,13 +418,16 @@ function draw() {
     // Matter.World.add(world, ground);
     }
   // Calculate the proportional height
+  //Light Switch 
+  Simulate();
+  darkmode(dark)
   drawBB()
   tutorial()
   startOfLevel()
 }
 
-let startLTime = 220;
-let levelStart = true
+let startLTime = 0;
+let levelStart = false
 function startOfLevel() {
   let timeWord = '';
   if (levelStart){
@@ -474,7 +501,7 @@ function mouseClicked() {
     }
   }
   //tutorial 
-  if (TUTORIAL_STEP <=5) {
+  if (TUTORIAL_STEP <=6) {
   if (TUTORIAL_STEP != 1 && TUTORIAL_STEP != 4){
     if (!easyfix) {
     TUTORIAL_STEP++
@@ -489,11 +516,32 @@ function mousePressed() {
       ball.mousePressed();
     }
   }
+  if (run) {
+     if (selectedPoint == null) {
+      let r = checkArea(mouseX, mouseY);
+      if (!r[0]) {
+        selectedPoint = r[1];
+        toggleHelper = true
+        wind.x = 0;
+        wind.y = 0;
+      }
+    }
+  } 
 }
-
+let toggleHelper = true
 function mouseDragged() {
   for (var ball of allBalls) {
     ball.mouseDragged();
+  }
+  if (run) {
+    if (selectedPoint != null) {
+      points[selectedPoint].pos.x = mouseX;
+      points[selectedPoint].pos.y = mouseY;
+      if (mouseY >= windowH/2 && toggleHelper) {
+      dark = !dark;
+        toggleHelper = false
+      }
+    }
   }
 }
 
@@ -501,6 +549,11 @@ function mouseReleased() {
   for (var ball of allBalls) {
     ball.mouseReleased();
   }
+    selection = [false, null, null];
+    wind.x = 0;
+    wind.y = 0;
+    selectedPoint = null;
+
 }
 
 function checkBuilding(building) {
@@ -521,7 +574,7 @@ function checkBuildingAgainstBall(building, ball) {
   }
 }
 
-function addBall(type, building, size) {
+function addBall(type, building, size, sus_value) {
 
   let lowerWidth = pooleGateway.getX() + 100;
   let upperWidth = dorsetHouse.getX() + dorsetHouse.getSize() - 100;
@@ -532,7 +585,7 @@ function addBall(type, building, size) {
     if (building.getBudget()["total"] > building.getBalls().length) {
       // enough capacity
       //🛸TYPE, BUILDING, GRAVITY(TRUE???)🛸
-      let ball = new Ball(type, building, size, Math.random()*(upperWidth-lowerWidth)+lowerWidth, windowHeight * 0.7);
+      let ball = new Ball(type, building, size, sus_value, Math.random()*(upperWidth-lowerWidth)+lowerWidth, windowHeight * 0.7);
 
       building.addBall(ball);
       allBalls.push(ball);
@@ -540,11 +593,11 @@ function addBall(type, building, size) {
     } else {
       // not enough capacity
       //🛸TYPE, BUILDING, GRAVITY(FALSE??)🛸
-      let ball = new Ball(type, null, size, Math.random()*(upperWidth-lowerWidth)+lowerWidth, windowHeight * 0.7);
+      let ball = new Ball(type, null, size, sus_value, Math.random()*(upperWidth-lowerWidth)+lowerWidth, windowHeight * 0.7);
       allBalls.push(ball);
     }
   } else {
-    let ball = new Ball(type, null, size, Math.random()*(upperWidth-lowerWidth)+lowerWidth, windowHeight * 0.7);
+    let ball = new Ball(type, null, size, sus_value, Math.random()*(upperWidth-lowerWidth)+lowerWidth, windowHeight * 0.7);
     allBalls.push(ball);
   }
 }
@@ -580,7 +633,7 @@ function checkSustainability(roomCode) {
         // console.log(current_building)
         if (current_building != null) {
             // console.log(default_sustainability[current_building.code])
-            sus_level[current_building.code] += 10
+            sus_level[current_building.code] += current_ball.getSusValue()
         } 
     }
     // return getData('/sustainability')
@@ -606,3 +659,24 @@ function seeBallsHomes() {
         console.log(current_ball.getBuilding())
     }
 }
+
+  //Make Light Switch
+  function makePuller() {
+    let X_CORD_SWITCH = 1350
+    points.push(new Point(X_CORD_SWITCH, -10 ,points.length));
+    points.push(new Point(X_CORD_SWITCH, 87 ,points.length));
+    sticks.push(new Stick(points[0], points[1]));
+    points.push(new Point(X_CORD_SWITCH, 131 ,points.length));
+    sticks.push(new Stick(points[1], points[2]));
+    points.push(new Point(X_CORD_SWITCH, 175 ,points.length));
+    sticks.push(new Stick(points[2], points[3]));
+    points.push(new Point(X_CORD_SWITCH, 221 ,points.length));
+    sticks.push(new Stick(points[3], points[4]));
+    for (let p in points){
+      if(p==0){
+        points[p].locked = true
+      } else{
+      points[p].locked = false
+    }
+    }
+  }

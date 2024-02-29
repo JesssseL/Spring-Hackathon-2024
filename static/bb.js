@@ -26,7 +26,7 @@ let BucketBotArr = {
 }
 
 function drawBB() {
-  if (TUTORIAL_STEP <= 5 || TUTORIAL_STEP > 10) {
+  if (TUTORIAL_STEP <= 6 || TUTORIAL_STEP > 10) {
   let wantToBe = windowW/2.5
   let newHeight = (BBok.height * wantToBe) / speachBub.width;
 
@@ -73,6 +73,13 @@ function tutorial() {
   } else if (TUTORIAL_STEP == 5) {
     BBspeak = 'Perfect!! \n You seem to get it!';
     BBimg = 2;
+  } else if (TUTORIAL_STEP == 6) {
+    BBspeak = 'Tutorial Complete! \n [click to beggin]';
+    BBimg = 2;
+  } else if (TUTORIAL_STEP == 7) {
+    startLTime = 200;
+    levelStart = true
+    TUTORIAL_STEP++
   } else if (TUTORIAL_STEP == 15) {
     BBspeak = 'AHHH!! \n HURRY UP!!!';
     BBimg = 0;
