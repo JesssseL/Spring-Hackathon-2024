@@ -9,6 +9,7 @@ class Stick{
     push();
     stroke(255);
     strokeWeight(4);
+    
     line(this.pointA.pos.x,this.pointA.pos.y,this.pointB.pos.x+this.off,this.pointB.pos.y+this.off);
     pop();
   }

@@ -63,6 +63,8 @@ class Ball {
   constructor(type, building, size, x, y) {
     this.x = x;
     this.y = y;
+    this.default_x = x;
+    this.default_y = y;
     this.type = type;
     this.building = building;
     this.size = size;
@@ -73,6 +75,8 @@ class Ball {
   //returning private variables
   getX() { return this.x; }
   getY() { return this.y; }
+  getDefaultX() { return this.default_x; }
+  getDefaultY() { return this.default_y; }
   setX(x) { this.x = x; }
   setY(y) { this.y = y; }
   getType() { return this.type; }

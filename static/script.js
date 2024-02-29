@@ -179,20 +179,22 @@ function resetLevel() {
   YellowGreen = '#8127D5';
   TeaGreen = '#AC85EB';
   HoneyDew = '#fdd9f3';
-  startLTime = 240;
+  startLTime = 200;
   levelStart = true
   resetTime()
 }
 function resetTime() {
-    let lowerWidth = pooleGateway.getX() + 100;
-    let upperWidth = dorsetHouse.getX() + dorsetHouse.getSize() - 100;
   // balls
   for (let ball of allBalls) { // balls
-      let xVal = Math.random()*(upperWidth-lowerWidth)+lowerWidth
-      console.log(`X Val: ${xVal}`)
-    ball.setX(xVal);
-    ball.setY(windowHeight * 0.7);
-      ball.update()
+      ball.setBuilding(null)
+      let newX = ball.getDefaultX();
+    ball.body.position.x = newX
+      // ball.setX(newX)
+      let newY = ball.getDefaultY();
+    ball.body.position.y = newY
+      // ball.setY(newY)
+      console.log(`X: ${newX} Y: ${newY}`)
+      
   }
   
   levelButton.hide()
@@ -217,6 +219,7 @@ function buttonReact() {
     let newColor = color(Zomp); //staring Color
     newColor.setAlpha(sayNo); 
     fill(newColor)
+    noStroke();
     text("NO", 0, (windowH/2)-100, windowW);
     sayNo--
   }
@@ -238,6 +241,7 @@ function draw() {
   //Change Speed Here
   frameRate(60);
   background(RobinEggBlue);
+  stroke(1);
 
   //translate(windowWidth/2, windowHeight/2);
 
@@ -317,9 +321,31 @@ function draw() {
         graphFill = 100
       }
       rect(graphCoOrds[b] + GAP, boxHeight + GAP, GAP, ((GAP*graphCoOrds[b+10])-(GAP*3))*(1-(graphFill/100)));
-    }
 
+      //📛 Naming the buildings 📛
+      noStroke();
+      fill('black');
+      switch (graphCoOrds[b+20]){
+        case 'F':
+          text('Fusion', graphCoOrds[b] + (GAP*2), boxHeight);
+          break;
+        case 'PG':
+          text('Gateway', graphCoOrds[b] + (GAP*2), boxHeight);
+          break;
+        case 'D':
+          text('Dorset', graphCoOrds[b] + (GAP*2), boxHeight);
+          break;
+        case 'K':
+          text('Kimmerage', graphCoOrds[b] + (GAP*2), boxHeight);
+          break;
+        default:
+          text('building', graphCoOrds[b] + (GAP*2), boxHeight);
+          break;
+      }
+      stroke(1)
+    }
       
+      //Lord Knows whats going on here
     let bounds = Matter.Bodies.rectangle(
       windowWidth / 2,
       windowHeight * 0.9 + (windowHeight * 0.5) - 120, // Adjust the position to be slightly below the area where balls are rendered
@@ -401,6 +427,7 @@ function startOfLevel() {
       background(HoneyDew)
     fill(Zomp)
     textSize(200)
+    textStyle(BOLD);
     noStroke()
       text(timeWord, 0, (windowH/2)-100, windowW);
       startLTime--
