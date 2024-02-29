@@ -29,8 +29,6 @@ function drawBB() {
   if (TUTORIAL_STEP <= 5 || TUTORIAL_STEP > 10) {
   let wantToBe = windowW/2.5
   let newHeight = (BBok.height * wantToBe) / speachBub.width;
-  //speach bubble
-  image(speachBub, windowW-wantToBe, (windowH/2)-wantToBe, wantToBe, newHeight);
 
   // Calculate the proportional height
   wantToBe = windowW/5

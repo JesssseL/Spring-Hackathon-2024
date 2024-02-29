@@ -5,6 +5,7 @@ let jessLittleGuyCounter = 5;
 const waterCost = 370; // type = 'W'
 const electricCost = 45; // type = 'E'
 const gasCost = 10.7; // type = 'G'
+let levelButton;
 let windowW = window.innerWidth;
 let windowH = (window.innerHeight)*0.9
 const LEVEL_TIME = 2000;
@@ -145,15 +146,24 @@ function setup() {
   } else {
     for (let project of projects) {
         // console.log(project)
-      let size = Math.floor(project["cost"]/( (project["cost"] > 8500) ? 1000 : 10000))
+      let size = Math.floor(project["cost"]/( (project["cost"] > 8500) ? 1000 : 10000)) // 1000, 10000
+      console.log(size);
+      if (size < 30) {
+        size = 40;
+      } else if (size > 150) {
+        size = 150;
+      }
       // let size = Math.log2(project["cost"])*2
       // console.log(size)
       addBall(project["category"], null, size)
     }
   }
 
-
-
+  //Next Level
+  levelButton = createButton('Next Level');
+  levelButton.position(windowW*0.45, windowH*0.6);
+  levelButton.mousePressed(resetLevel);
+  levelButton.hide()
 
   //Reset Button
   let button;  
@@ -161,7 +171,25 @@ function setup() {
   button.position(75, 45);
   button.mousePressed(resetTime);
 }
+function resetLevel() {
+  levelInfo = '🛰️Level 2🚀 - 🛸IN THE FUTURE🛸';
+  Zomp = '#960A23';
+  RobinEggBlue = '#BB2930';
+  YellowGreen = '#8127D5';
+  TeaGreen = '#AC85EB';
+  HoneyDew = '#fdd9f3';
+  resetTime()
+}
 function resetTime() {
+
+  // balls
+
+  for (let ball of allBalls) {
+    ball.setX(Math.random()*(upperWidth-lowerWidth)+lowerWidth);
+    ball.setY(windowHeight * 0.7);
+  }
+  
+  levelButton.hide()
   //set current time to 0
   if (currentTime > 120) {
     currentTime = 0
@@ -256,6 +284,7 @@ function draw() {
       if (sus >= 60) {
         //Win Sequence here
         text('🎉', windowWidth/2, windowHeight/2);
+        levelButton.show()
       } else {
         //Loss Sequence here
         text('💥', windowWidth/2, windowHeight/2);
