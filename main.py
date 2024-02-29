@@ -26,6 +26,12 @@ def index():  # Main Page
 def dan():
     return render_template("dan.html")
 
+# WebGL
+
+@app.route('/webgl')
+def webgl():
+    return render_template("webgl/index.html")
+
 # ^^ MAIN ROUTE WEHRE BALLS AND BOXES ARE ^^
 
 

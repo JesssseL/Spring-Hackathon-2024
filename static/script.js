@@ -1,26 +1,30 @@
 // Jess little guy counter
-let jessLittleGuyCounter = 4;
+let jessLittleGuyCounter = 5;
 
 //Setting Building Details
 const waterCost = 370; // type = 'W'
 const electricCost = 45; // type = 'E'
 const gasCost = 10.7; // type = 'G'
 let windowW = window.innerWidth;
-let windowH = (window.innerHeight)*0.8
+let windowH = (window.innerHeight)*0.9
 const LEVEL_TIME = 2000;
 let currentTime = 0
 const boxHeight = 200;
 let sayNo;
 let graphCoOrds = [0, 0, 0, 0];
 // Constants
-const FUSION_SIZE = 10;
-const POOLE_SIZE = 15;
-const DORSET_SIZE = 10;
+const FUSION_SIZE = 15;
+const POOLE_SIZE = 10;
+const DORSET_SIZE = 5;
 const KIMME_SIZE = 10;
 graphCoOrds[10] = FUSION_SIZE
 graphCoOrds[11] = POOLE_SIZE
 graphCoOrds[12] = DORSET_SIZE
 graphCoOrds[13] = KIMME_SIZE
+graphCoOrds[20] = 'F'
+graphCoOrds[21] = 'PG'
+graphCoOrds[22] = 'D'
+graphCoOrds[23] = 'K'
 
 let DEVMODE = false; // true = test balls, false = normal balls
 
@@ -68,7 +72,7 @@ const GAP = 20;
 const MAX = ((windowW/100));
 function setup() {
   //p5.js
-  createCanvas(windowWidth-25, windowHeight*0.8);
+  createCanvas(windowWidth-25, windowHeight*0.9);
   
   //Matter.js
   engine = Matter.Engine.create(); // HELLO ANDREW!!!
@@ -98,8 +102,7 @@ function setup() {
 
   // Get Budget & Sustainability Data
     let budgetData = checkBudgets();
-    // let default_sustainability = getData("/sustainability")
-    let default_sustainability
+
     let sustainabilityData = getData("/sustainability")
     let projects = getProjects();
     
@@ -140,7 +143,7 @@ function setup() {
     }
   } else {
     for (let project of projects) {
-        console.log(project)
+        // console.log(project)
       let size = Math.floor(project["cost"]/( (project["cost"] > 8500) ? 1000 : 10000))
       // let size = Math.log2(project["cost"])*2
       // console.log(size)
@@ -179,7 +182,7 @@ function buttonReact() {
     let newColor = color(Zomp); //staring Color
     newColor.setAlpha(sayNo); 
     fill(newColor)
-    text("NO", 0, 25, windowW);
+    text("NO", 0, (windowH/2)-100, windowW);
     sayNo--
   }
 }
@@ -202,8 +205,6 @@ function draw() {
   background(RobinEggBlue);
 
   //translate(windowWidth/2, windowHeight/2);
-
-  buttonReact()
 
   //------UI Elements------
   //Title Text + Box
@@ -258,9 +259,9 @@ function draw() {
       fill(TeaGreen);
       rect(graphCoOrds[b] + GAP, boxHeight + GAP, GAP, (GAP*graphCoOrds[b+10])-(GAP*3));
       fill('white');
-      rect(graphCoOrds[b] + GAP, boxHeight + GAP, GAP, ((GAP*graphCoOrds[b+10])-(GAP*3))*0.8);
+      rect(graphCoOrds[b] + GAP, boxHeight + GAP, GAP, ((GAP*graphCoOrds[b+10])-(GAP*3))*(1-(checkSustainability(graphCoOrds[b+20])/100)));
     }
-      
+    buttonReact()
 
     let bounds = Matter.Bodies.rectangle(
       windowWidth / 2,
@@ -287,6 +288,20 @@ function draw() {
     
     for (var ball of allBalls) {
       ball.update();
+      if (ball.hasBuilding()) {
+      if (checkBuildingAgainstBall(fusion, ball)) {
+        ball.setBuilding(fusion);
+      }
+      if (checkBuildingAgainstBall(pooleGateway, ball)) {
+        ball.setBuilding(pooleGateway);
+      }
+      if (checkBuildingAgainstBall(dorsetHouse, ball)) {
+        ball.setBuilding(dorsetHouse);
+      }
+      if (checkBuildingAgainstBall(kimmeridge, ball)) {
+        ball.setBuilding(kimmeridge);
+      }
+      }
     }
 
 
@@ -379,6 +394,15 @@ function checkBuilding(building) {
   }
 }
 
+function checkBuildingAgainstBall(building, ball) {
+  //Checks if mouse is over a building
+  if (ball.getX() > building.getX() && ball.getX() < building.getX() + building.getSize() && ball.getY() > building.getY() && ball.getY() < building.getY() + building.getSize()) {
+    return true
+  } else {
+    return false
+  }
+}
+
 function addBall(type, building, size) {
   if (building != null) { 
       alert("building is not null"); 
@@ -416,25 +440,30 @@ function getData(url) {
 
     } else {
         // If anything but successful
-        alert(`An error occured while trying to look at: ${url}. Pls tell james he done a silly`)
+        alert(`An error occured while trying to look at: ${url}. Please reload the page. If it still broke then tell james he did a silly`)
     }
 }
 
+let default_sustainability;
+let sus_level = {"F": 0, "PG": 0, "D": 0, "K": 0};
+
+
 //Sustainability Scores
-function checkSustainability() {
+function checkSustainability(roomCode) {
+    // console.log(roomCode)
     if (default_sustainability == null) { default_sustainability = getData("/sustainability") }
+    sus_level = {"F": default_sustainability["F"], "PG": default_sustainability["PG"], "D": default_sustainability["D"], "K": default_sustainability["K"]};
     // console.log(default_vals)
-    let sus_level = {}
     for (let current_ball of allBalls) {
         let current_building = current_ball.getBuilding()
-        console.log(current_building)
+        // console.log(current_building)
         if (current_building != null) {
-            console.log(default_sustainability[current_building.code])
-            sus_level[current_building.code] = default_sustainability[current_building.code]
+            // console.log(default_sustainability[current_building.code])
+            sus_level[current_building.code] += 10
         } 
     }
     // return getData('/sustainability')
-    return sus_level;
+    return sus_level[roomCode];
 }
 
 function checkBudgets() {
@@ -443,4 +472,16 @@ function checkBudgets() {
 
 function getProjects() {
     return getData('/projects')
+}
+
+function FREEZE() {
+    for (let current_ball of allBalls) {
+        Matter.body.setStatic(current_ball.body, true)
+    }
+}
+
+function seeBallsHomes() {
+    for (let current_ball of allBalls) {
+        console.log(current_ball.getBuilding())
+    }
 }

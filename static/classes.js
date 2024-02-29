@@ -71,11 +71,14 @@ class Ball {
     Matter.World.add(world, this.body);
   }
   //returning private variables
+  getX() { return this.x; }
+  getY() { return this.y; }
   setX(x) { this.x = x; }
   setY(y) { this.y = y; }
   getType() { return this.type; }
   getSize() { return this.size; }
   getBuilding() { return this.building; }
+  hasBuilding() { return this.building != null; }
   //Methods
   setBuilding(building) { 
     this.building = building; 
@@ -136,13 +139,13 @@ class Ball {
         }
 
       if (this.building != null) {
-        let leftBoundary = this.building.getX() + this.building.getSize() / 2;
+        let leftBoundary = this.building.getX() + this.size / 2;
         if (this.body.position.x < leftBoundary) {
-            Matter.Body.setPosition(this.body, { x: leftBoundary - this.size / 2, y: this.body.position.y });
+            Matter.Body.setPosition(this.body, { x: leftBoundary, y: this.body.position.y });
         }
-        let rightBoundary =leftBoundary + this.building.getSize();
+        let rightBoundary =leftBoundary + this.building.getSize() - this.size;
         if (this.body.position.x > rightBoundary) {
-            Matter.Body.setPosition(this.body, { x: rightBoundary + this.size / 2, y: this.body.position.y });
+            Matter.Body.setPosition(this.body, { x: rightBoundary, y: this.body.position.y });
         }
       }
       
@@ -195,9 +198,9 @@ class Ball {
   }
 
   mouseReleased() {
-      console.log("mouse released")
+      // console.log("mouse released")
     if (this.dragging) {
-      console.log("released a ball")
+      // console.log("released a ball")
       if (TUTORIAL_STEP == 1){
         console.log('have ball')
         TUTORIAL_STEP=2
