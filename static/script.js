@@ -72,6 +72,7 @@ let allBalls = [];
 const START = 75;
 const GAP = 20;
 const MAX = ((windowW/100));
+let button;  
 function setup() {
   //p5.js
   createCanvas(windowWidth-25, windowHeight*0.9);
@@ -83,8 +84,8 @@ function setup() {
       element: document.body,
       engine: engine,
       options: {
-          width: windowWidth,
-          height: windowHeight,
+          width: 1, // Set to 1 & 1 to remove the secondary canvas from the screen
+          height: 1, // ^ doing so changes 0 physics calcs... idk why it did that
           wireframes: false, // Set to true for wireframe rendering if needed
           showAxes: true, // Show axes
           showAngleIndicator: true, // Show angle indicator
@@ -146,12 +147,13 @@ function setup() {
   } else {
     for (let project of projects) {
         // console.log(project)
+        // let size = (project["cost"]/100000)*windowWidth;
       let size = Math.floor(project["cost"]/( (project["cost"] > 8500) ? 1000 : 10000)) // 1000, 10000
       console.log(size);
       if (size < 30) {
         size = 40;
-      } else if (size > 150) {
-        size = 150;
+      } else if (size > 100) {
+        size = 100;
       }
       // let size = Math.log2(project["cost"])*2
       // console.log(size)
@@ -166,7 +168,6 @@ function setup() {
   levelButton.hide()
 
   //Reset Button
-  let button;  
   button = createButton('Try Again?');
   button.position(75, 45);
   button.mousePressed(resetTime);
@@ -178,15 +179,20 @@ function resetLevel() {
   YellowGreen = '#8127D5';
   TeaGreen = '#AC85EB';
   HoneyDew = '#fdd9f3';
+  startLTime = 240;
+  levelStart = true
   resetTime()
 }
 function resetTime() {
-
+    let lowerWidth = pooleGateway.getX() + 100;
+    let upperWidth = dorsetHouse.getX() + dorsetHouse.getSize() - 100;
   // balls
-
-  for (let ball of allBalls) {
-    ball.setX(Math.random()*(upperWidth-lowerWidth)+lowerWidth);
+  for (let ball of allBalls) { // balls
+      let xVal = Math.random()*(upperWidth-lowerWidth)+lowerWidth
+      console.log(`X Val: ${xVal}`)
+    ball.setX(xVal);
     ball.setY(windowHeight * 0.7);
+      ball.update()
   }
   
   levelButton.hide()
@@ -306,10 +312,14 @@ function draw() {
       fill(TeaGreen);
       rect(graphCoOrds[b] + GAP, boxHeight + GAP, GAP, (GAP*graphCoOrds[b+10])-(GAP*3));
       fill('white');
-      rect(graphCoOrds[b] + GAP, boxHeight + GAP, GAP, ((GAP*graphCoOrds[b+10])-(GAP*3))*(1-(checkSustainability(graphCoOrds[b+20])/100)));
+      let graphFill = checkSustainability(graphCoOrds[b+20])
+      if (graphFill  > 100){
+        graphFill = 100
+      }
+      rect(graphCoOrds[b] + GAP, boxHeight + GAP, GAP, ((GAP*graphCoOrds[b+10])-(GAP*3))*(1-(graphFill/100)));
     }
-    buttonReact()
 
+      
     let bounds = Matter.Bodies.rectangle(
       windowWidth / 2,
       windowHeight * 0.9 + (windowHeight * 0.5) - 120, // Adjust the position to be slightly below the area where balls are rendered
@@ -348,9 +358,11 @@ function draw() {
       if (checkBuildingAgainstBall(kimmeridge, ball)) {
         ball.setBuilding(kimmeridge);
       }
+      
       //}
     }
-
+      buttonReact()
+      
 
     // ground = Matter.Bodies.rectangle(windowWidth/2, windowHeight-20, windowWidth, 20, {isStatic: true})
     // Matter.World.add(world, ground);
@@ -358,10 +370,42 @@ function draw() {
   // Calculate the proportional height
   drawBB()
   tutorial()
+  startOfLevel()
 }
 
-
-
+let startLTime = 220;
+let levelStart = true
+function startOfLevel() {
+  let timeWord = '';
+  if (levelStart){
+    button.hide()
+      textSize(200);
+      let newColor = color('red'); //staring Color
+      newColor.setAlpha(sayNo); 
+      fill(newColor)
+      //Find out how far in
+        if (startLTime <= 240 && startLTime >= 180) {
+          timeWord = '3'
+        } else if (startLTime <= 180 && startLTime >= 120) {
+          timeWord = '2'
+        } else if (startLTime <= 120 && startLTime >= 60) {
+          timeWord = '1'
+        } else if (startLTime <= 60 && startLTime >= 0) {
+          timeWord = 'Go!'
+        } else if (startLTime <= 0) {
+          button.show()
+          timeWord = '';
+          currentTime = 0;
+          levelStart = false;
+        }
+      background(HoneyDew)
+    fill(Zomp)
+    textSize(200)
+    noStroke()
+      text(timeWord, 0, (windowH/2)-100, windowW);
+      startLTime--
+  }
+}
 
 function mouseClicked() {
   //Check if mouse is over a building and react appropriatly ***COUGH COUGH ANDREW*** ahew sorry, what was that?
@@ -497,7 +541,6 @@ function getData(url) {
 
 let default_sustainability;
 let sus_level = {"F": 0, "PG": 0, "D": 0, "K": 0};
-
 
 //Sustainability Scores
 function checkSustainability(roomCode) {
