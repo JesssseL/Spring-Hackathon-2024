@@ -359,7 +359,7 @@ function draw() {
           text('Dorset', graphCoOrds[b] + (GAP*2), boxHeight);
           break;
         case 'K':
-          text('Kimmerage', graphCoOrds[b] + (GAP*4), boxHeight);
+          text('Kimmerage', graphCoOrds[b] + (GAP*3), boxHeight);
           break;
         default:
           text('building', graphCoOrds[b] + (GAP*2), boxHeight);
