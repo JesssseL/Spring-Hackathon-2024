@@ -662,7 +662,7 @@ function seeBallsHomes() {
 
   //Make Light Switch
   function makePuller() {
-    let X_CORD_SWITCH = (windowW - (windowW/12))
+    let X_CORD_SWITCH = (windowW - (windowW/20))
     points.push(new Point(X_CORD_SWITCH, -90 ,points.length));
     points.push(new Point(X_CORD_SWITCH, -20 ,points.length));
     sticks.push(new Stick(points[0], points[1]));
