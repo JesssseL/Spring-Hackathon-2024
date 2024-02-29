@@ -252,9 +252,10 @@ function draw() {
       }
       sus = sus/4
       //☘️🍀🍁🍂🍃🍄🪨🪵🌴🌵🌾🌿🌷🪻
+      //Win/Loss Sequences
       if (sus >= 60) {
         //Win Sequence here
-      text('🎉', windowWidth/2, windowHeight/2);
+        text('🎉', windowWidth/2, windowHeight/2);
       } else {
         //Loss Sequence here
         text('💥', windowWidth/2, windowHeight/2);
