@@ -93,7 +93,7 @@ let button;
 
 function setup() {
   //p5.js
-  createCanvas(windowWidth-25, windowHeight*0.9);
+  createCanvas(windowW, windowH);
     fusion3D = loadImage("/static/3D/fusion.png")
     pgb3D = loadImage("/static/3D/pgb.png")
     kimmeridge3D = loadImage("/static/3D/kimmeridge.png")
@@ -664,13 +664,13 @@ function seeBallsHomes() {
   function makePuller() {
     let X_CORD_SWITCH = 1350
     points.push(new Point(X_CORD_SWITCH, -10 ,points.length));
-    points.push(new Point(X_CORD_SWITCH, 87 ,points.length));
+    points.push(new Point(X_CORD_SWITCH, 37 ,points.length));
     sticks.push(new Stick(points[0], points[1]));
-    points.push(new Point(X_CORD_SWITCH, 131 ,points.length));
+    points.push(new Point(X_CORD_SWITCH, 81 ,points.length));
     sticks.push(new Stick(points[1], points[2]));
-    points.push(new Point(X_CORD_SWITCH, 175 ,points.length));
+    points.push(new Point(X_CORD_SWITCH, 125 ,points.length));
     sticks.push(new Stick(points[2], points[3]));
-    points.push(new Point(X_CORD_SWITCH, 221 ,points.length));
+    points.push(new Point(X_CORD_SWITCH, 151 ,points.length));
     sticks.push(new Stick(points[3], points[4]));
     for (let p in points){
       if(p==0){
