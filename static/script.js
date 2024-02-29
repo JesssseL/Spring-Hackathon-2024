@@ -359,7 +359,7 @@ function draw() {
           text('Dorset', graphCoOrds[b] + (GAP*2), boxHeight);
           break;
         case 'K':
-          text('Kimmerage', graphCoOrds[b] + (GAP*2), boxHeight);
+          text('Kimmerage', graphCoOrds[b] + (GAP*4), boxHeight);
           break;
         default:
           text('building', graphCoOrds[b] + (GAP*2), boxHeight);
@@ -537,7 +537,7 @@ function mouseDragged() {
     if (selectedPoint != null) {
       points[selectedPoint].pos.x = mouseX;
       points[selectedPoint].pos.y = mouseY;
-      if (mouseY >= windowH/2 && toggleHelper) {
+      if (mouseY >= windowH/3 && toggleHelper) {
       dark = !dark;
         toggleHelper = false
       }
@@ -662,15 +662,15 @@ function seeBallsHomes() {
 
   //Make Light Switch
   function makePuller() {
-    let X_CORD_SWITCH = 1350
-    points.push(new Point(X_CORD_SWITCH, -10 ,points.length));
-    points.push(new Point(X_CORD_SWITCH, 37 ,points.length));
+    let X_CORD_SWITCH = (windowW - (windowW/12))
+    points.push(new Point(X_CORD_SWITCH, -90 ,points.length));
+    points.push(new Point(X_CORD_SWITCH, -20 ,points.length));
     sticks.push(new Stick(points[0], points[1]));
-    points.push(new Point(X_CORD_SWITCH, 81 ,points.length));
-    sticks.push(new Stick(points[1], points[2]));
-    points.push(new Point(X_CORD_SWITCH, 125 ,points.length));
+    points.push(new Point(X_CORD_SWITCH, 10 ,points.length));
+    sticks.push(new Stick(points[1], points[2]))
+    points.push(new Point(X_CORD_SWITCH, 50 ,points.length));
     sticks.push(new Stick(points[2], points[3]));
-    points.push(new Point(X_CORD_SWITCH, 151 ,points.length));
+    points.push(new Point(X_CORD_SWITCH, 90 ,points.length));
     sticks.push(new Stick(points[3], points[4]));
     for (let p in points){
       if(p==0){
